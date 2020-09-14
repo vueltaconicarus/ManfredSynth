@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# Jucer and Visual Studio directories
+Builds
+JuceLibraryCode

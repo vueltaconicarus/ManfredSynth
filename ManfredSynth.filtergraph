@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <FILTERGRAPH>
-  <FILTER uid="1" x="0.5" y="0.1" DPIAware="">
+  <FILTER uid="1" x="0.5" y="0.1" DPIAware="0.0">
     <PLUGIN name="Audio Input" descriptiveName="" format="Internal" category="I/O devices"
             manufacturer="JUCE" version="1.0" file="" uid="246006c0" isInstrument="0"
             fileTime="0" infoUpdateTime="0" numInputs="0" numOutputs="2"
@@ -12,11 +12,11 @@
         <BUS index="0" layout="disabled"/>
       </INPUTS>
       <OUTPUTS>
-        <BUS index="0" layout="L R Ls Rs"/>
+        <BUS index="0" layout="L R"/>
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="2" x="0.25" y="0.1" DPIAware="">
+  <FILTER uid="2" x="0.25" y="0.1" DPIAware="0.0">
     <PLUGIN name="MIDI Input" descriptiveName="" format="Internal" category="I/O devices"
             manufacturer="JUCE" version="1.0" file="" uid="a9e4f9eb" isInstrument="0"
             fileTime="0" infoUpdateTime="0" numInputs="0" numOutputs="0"
@@ -31,10 +31,10 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="3" x="0.3247744621790423" y="0.8136020151133502" DPIAware="">
+  <FILTER uid="3" x="0.3247744621790423" y="0.8136020151133502" DPIAware="0.0">
     <PLUGIN name="Audio Output" descriptiveName="" format="Internal" category="I/O devices"
             manufacturer="JUCE" version="1.0" file="" uid="724248cb" isInstrument="0"
-            fileTime="0" infoUpdateTime="0" numInputs="4" numOutputs="0"
+            fileTime="0" infoUpdateTime="0" numInputs="2" numOutputs="0"
             isShell="0"/>
     <STATE>0.</STATE>
     <LAYOUT>
@@ -46,7 +46,7 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="4" x="0.4732824427480916" y="0.8148614609571788" DPIAware="">
+  <FILTER uid="4" x="0.4732824427480916" y="0.8148614609571788" DPIAware="0.0">
     <PLUGIN name="MIDI Output" descriptiveName="" format="Internal" category="I/O devices"
             manufacturer="JUCE" version="1.0" file="" uid="9d5bbb00" isInstrument="0"
             fileTime="0" infoUpdateTime="0" numInputs="0" numOutputs="0"
@@ -61,11 +61,11 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="5" x="0.3879250520471895" y="0.4143576826196473" DPIAware=""
-          uiLastX_Normal="116" uiLastY_Normal="221" uiopen_Normal="0">
+  <FILTER uid="5" x="0.3393476752255378" y="0.4042821158690176" DPIAware="0.0"
+          uiLastX_Normal="117" uiLastY_Normal="149" uiopen_Normal="0">
     <PLUGIN name="ManfredSynth" format="VST3" category="Instrument|Synth"
             manufacturer="VSL" version="1.0.0" file="C:\Users\Manfred Valentan\Audio Development\ManfredSynth\Builds\VisualStudio2019\x64\Debug\VST3\ManfredSynth.vst3"
-            uid="e9539cfd" isInstrument="1" fileTime="1748d3b244e" infoUpdateTime="1748d3d9b3f"
+            uid="e9539cfd" isInstrument="1" fileTime="1748e38028b" infoUpdateTime="1748e38c734"
             numInputs="0" numOutputs="2" isShell="0"/>
     <STATE>191.VMjLgXK....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9..</STATE>
     <LAYOUT>
@@ -78,5 +78,4 @@
   <CONNECTION srcFilter="2" srcChannel="4096" dstFilter="5" dstChannel="4096"/>
   <CONNECTION srcFilter="5" srcChannel="0" dstFilter="3" dstChannel="0"/>
   <CONNECTION srcFilter="5" srcChannel="1" dstFilter="3" dstChannel="1"/>
-  <CONNECTION srcFilter="5" srcChannel="4096" dstFilter="4" dstChannel="4096"/>
 </FILTERGRAPH>

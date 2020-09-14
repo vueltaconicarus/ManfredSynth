@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include <sstream>
+#include "ManfredSynthGUI.h"
 
 //==============================================================================
 /**
@@ -36,6 +37,7 @@ private:
 
     // MV: create a slider for setting the MIDI volume (MIDI velocity)
     juce::Slider midiVolume;
+    ManfredSynthGUI gui;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ManfredSynthAudioProcessorEditor)
 };

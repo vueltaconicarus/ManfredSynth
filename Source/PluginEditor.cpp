@@ -15,7 +15,7 @@ ManfredSynthAudioProcessorEditor::ManfredSynthAudioProcessorEditor (ManfredSynth
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (200, 200); // MV: changed from (300, 400)
+    setSize (1000, 600); // MV: changed from (300, 400)
 
     // MV: these define the parameters of our slider object
     midiVolume.setSliderStyle(juce::Slider::LinearBarVertical);
@@ -31,6 +31,9 @@ ManfredSynthAudioProcessorEditor::ManfredSynthAudioProcessorEditor (ManfredSynth
     // MV: slider listener
     midiVolume.addListener(this);
 
+    // display gui elements
+    addAndMakeVisible(&gui);
+    
 }
 
 ManfredSynthAudioProcessorEditor::~ManfredSynthAudioProcessorEditor()
@@ -56,11 +59,11 @@ void ManfredSynthAudioProcessorEditor::paint (juce::Graphics& g)
     g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
     */
 
-    // fill the whole window white
-    g.fillAll(juce::Colours::white);
+    // fill the whole window grey
+    g.fillAll(juce::Colour(0xff323e44));
 
-    // set the current drawing colour to black
-    g.setColour(juce::Colours::black);
+    // set the current drawing colour to black (all subsequent drawings use the current drawing color)
+    g.setColour(juce::Colours::white);
 
     // set the font size and draw text to the screen
     g.setFont(15.0f);
@@ -76,5 +79,8 @@ void ManfredSynthAudioProcessorEditor::resized()
 
     // MV: sets the position and size of the slider with arguments (x, y, width, height)
     midiVolume.setBounds(40, 30, 20, getHeight() - 60);
+    
+    gui.setBounds(10, 10, getWidth(), getHeight());
+
 
 }

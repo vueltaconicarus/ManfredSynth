@@ -55,6 +55,8 @@ public:
 
     // MV ===========================================================================
     float noteOnVel; // to store the incoming MIDI velocity
+    juce::dsp::Chorus<float> chorus; // 
+    juce::Synthesiser synth;
 
 
 private:

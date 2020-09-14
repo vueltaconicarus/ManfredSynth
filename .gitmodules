@@ -1,0 +1,3 @@
+[submodule "ext/stk_wrapper"]
+	path = ext/stk_wrapper
+	url = https://github.com/adamski/stk_wrapper.git

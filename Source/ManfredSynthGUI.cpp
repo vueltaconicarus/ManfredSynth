@@ -18,6 +18,7 @@
 */
 
 //[Headers] You can add your own extra header files here...
+#include "PluginProcessor.h"
 //[/Headers]
 
 #include "ManfredSynthGUI.h"
@@ -47,6 +48,7 @@ ManfredSynthGUI::ManfredSynthGUI ()
 
     reverb__toggleButton.reset (new juce::ToggleButton ("Reverb"));
     addAndMakeVisible (reverb__toggleButton.get());
+    reverb__toggleButton->addListener (this);
 
     reverb__toggleButton->setBounds (224, 40, 100, 24);
 
@@ -58,22 +60,58 @@ ManfredSynthGUI::ManfredSynthGUI ()
 
     reverb__slider.reset (new juce::Slider ("Reverb Slider"));
     addAndMakeVisible (reverb__slider.get());
-    reverb__slider->setRange (0, 10, 0);
+    reverb__slider->setRange (1, 100, 1);
     reverb__slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
     reverb__slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     reverb__slider->setColour (juce::Slider::thumbColourId, juce::Colours::green);
     reverb__slider->addListener (this);
 
-    reverb__slider->setBounds (224, 80, 150, 72);
+    reverb__slider->setBounds (216, 80, 150, 72);
 
-    chorus__slider.reset (new juce::Slider ("Chorus Slider"));
-    addAndMakeVisible (chorus__slider.get());
-    chorus__slider->setRange (0, 10, 0);
-    chorus__slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
-    chorus__slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    chorus__slider->addListener (this);
+    chorus_rate_slider.reset (new juce::Slider ("Chorus Rate Slider"));
+    addAndMakeVisible (chorus_rate_slider.get());
+    chorus_rate_slider->setRange (1, 99, 1);
+    chorus_rate_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
+    chorus_rate_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    chorus_rate_slider->addListener (this);
 
-    chorus__slider->setBounds (392, 80, 150, 72);
+    chorus_rate_slider->setBounds (392, 80, 150, 72);
+
+    chorus_depth_slider.reset (new juce::Slider ("Chorus Depth Slider"));
+    addAndMakeVisible (chorus_depth_slider.get());
+    chorus_depth_slider->setRange (0, 1, 0.01);
+    chorus_depth_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
+    chorus_depth_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    chorus_depth_slider->addListener (this);
+
+    chorus_depth_slider->setBounds (392, 144, 150, 72);
+
+    chorus_centredelay_slider.reset (new juce::Slider ("Chorus CentreDelay Slider"));
+    addAndMakeVisible (chorus_centredelay_slider.get());
+    chorus_centredelay_slider->setRange (0, 100, 1);
+    chorus_centredelay_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
+    chorus_centredelay_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    chorus_centredelay_slider->addListener (this);
+
+    chorus_centredelay_slider->setBounds (392, 208, 150, 72);
+
+    chorus_feedback_slider.reset (new juce::Slider ("Chorus Feedback Slider"));
+    addAndMakeVisible (chorus_feedback_slider.get());
+    chorus_feedback_slider->setRange (-1, 1, 0.01);
+    chorus_feedback_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
+    chorus_feedback_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    chorus_feedback_slider->addListener (this);
+
+    chorus_feedback_slider->setBounds (392, 272, 150, 72);
+
+    chorus_mix_slider.reset (new juce::Slider ("Chorus Mix Slider"));
+    addAndMakeVisible (chorus_mix_slider.get());
+    chorus_mix_slider->setRange (0, 1, 0.01);
+    chorus_mix_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
+    chorus_mix_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    chorus_mix_slider->addListener (this);
+
+    chorus_mix_slider->setBounds (392, 336, 150, 72);
 
 
     //[UserPreSize]
@@ -83,6 +121,20 @@ ManfredSynthGUI::ManfredSynthGUI ()
 
 
     //[Constructor] You can add your own custom stuff here..
+    // set initial chorus values on sliders
+    chorus_rate_slider->setValue(CHORUSRATE);
+    chorus_depth_slider->setValue(CHORUSDEPTH);
+    chorus_centredelay_slider->setValue(CHORUSCENTREDELAY);
+    chorus_feedback_slider->setValue(CHORUSFEEDBACK);
+    chorus_mix_slider->setValue(CHORUSMIX);
+
+    // set initial enable state of the components
+    ManfredSynthAudioProcessor::doChorus = CHORUSENABLE;
+    chorus_centredelay_slider->setEnabled(CHORUSENABLE);
+    chorus_depth_slider->setEnabled(CHORUSENABLE);
+    chorus_rate_slider->setEnabled(CHORUSENABLE);
+    chorus_mix_slider->setEnabled(CHORUSENABLE);
+    chorus_feedback_slider->setEnabled(CHORUSENABLE);
 
     //[/Constructor]
 }
@@ -96,7 +148,11 @@ ManfredSynthGUI::~ManfredSynthGUI()
     reverb__toggleButton = nullptr;
     chorus__toggleButton = nullptr;
     reverb__slider = nullptr;
-    chorus__slider = nullptr;
+    chorus_rate_slider = nullptr;
+    chorus_depth_slider = nullptr;
+    chorus_centredelay_slider = nullptr;
+    chorus_feedback_slider = nullptr;
+    chorus_mix_slider = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -122,13 +178,73 @@ void ManfredSynthGUI::paint (juce::Graphics& g)
     }
 
     {
-        int x = 380, y = 28, width = 164, height = 140;
+        int x = 380, y = 28, width = 164, height = 404;
         juce::Colour strokeColour = juce::Colours::green;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
         g.setColour (strokeColour);
         g.drawRect (x, y, width, height, 5);
 
+    }
+
+    {
+        int x = 396, y = 84, width = 80, height = 26;
+        juce::String text (TRANS("Rate (Hz)"));
+        juce::Colour fillColour = juce::Colours::azure;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centredLeft, true);
+    }
+
+    {
+        int x = 396, y = 140, width = 92, height = 26;
+        juce::String text (TRANS("Depth"));
+        juce::Colour fillColour = juce::Colours::azure;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centredLeft, true);
+    }
+
+    {
+        int x = 396, y = 204, width = 92, height = 26;
+        juce::String text (TRANS("Centre Delay (ms)"));
+        juce::Colour fillColour = juce::Colours::azure;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centredLeft, true);
+    }
+
+    {
+        int x = 396, y = 268, width = 92, height = 26;
+        juce::String text (TRANS("Feedback"));
+        juce::Colour fillColour = juce::Colours::azure;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centredLeft, true);
+    }
+
+    {
+        int x = 396, y = 332, width = 92, height = 26;
+        juce::String text (TRANS("Mix"));
+        juce::Colour fillColour = juce::Colours::azure;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centredLeft, true);
     }
 
     //[UserPaint] Add your own custom painting code here..
@@ -164,9 +280,21 @@ void ManfredSynthGUI::buttonClicked (juce::Button* buttonThatWasClicked)
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
 
-    if (buttonThatWasClicked == chorus__toggleButton.get())
+    if (buttonThatWasClicked == reverb__toggleButton.get())
+    {
+        //[UserButtonCode_reverb__toggleButton] -- add your button handler code here..
+        //[/UserButtonCode_reverb__toggleButton]
+    }
+    else if (buttonThatWasClicked == chorus__toggleButton.get())
     {
         //[UserButtonCode_chorus__toggleButton] -- add your button handler code here..
+        bool enabled = buttonThatWasClicked->getToggleState();  // read the new value into local variable
+        ManfredSynthAudioProcessor::doChorus = enabled;         // make new state available to the audio thread
+        chorus_centredelay_slider->setEnabled(enabled);         // Enable or disable the corresponding parameter sliders
+        chorus_depth_slider->setEnabled(enabled);
+        chorus_rate_slider->setEnabled(enabled);
+        chorus_mix_slider->setEnabled(enabled);
+        chorus_feedback_slider->setEnabled(enabled);
         //[/UserButtonCode_chorus__toggleButton]
     }
 
@@ -184,10 +312,35 @@ void ManfredSynthGUI::sliderValueChanged (juce::Slider* sliderThatWasMoved)
         //[UserSliderCode_reverb__slider] -- add your slider handling code here..
         //[/UserSliderCode_reverb__slider]
     }
-    else if (sliderThatWasMoved == chorus__slider.get())
+    else if (sliderThatWasMoved == chorus_rate_slider.get())
     {
-        //[UserSliderCode_chorus__slider] -- add your slider handling code here..
-        //[/UserSliderCode_chorus__slider]
+        //[UserSliderCode_chorus_rate_slider] -- add your slider handling code here..
+        ManfredSynthAudioProcessor::chorus.setRate(sliderThatWasMoved->getValue());
+        //[/UserSliderCode_chorus_rate_slider]
+    }
+    else if (sliderThatWasMoved == chorus_depth_slider.get())
+    {
+        //[UserSliderCode_chorus_depth_slider] -- add your slider handling code here..
+        ManfredSynthAudioProcessor::chorus.setDepth(sliderThatWasMoved->getValue());
+        //[/UserSliderCode_chorus_depth_slider]
+    }
+    else if (sliderThatWasMoved == chorus_centredelay_slider.get())
+    {
+        //[UserSliderCode_chorus_centredelay_slider] -- add your slider handling code here..
+        ManfredSynthAudioProcessor::chorus.setCentreDelay(sliderThatWasMoved->getValue());
+        //[/UserSliderCode_chorus_centredelay_slider]
+    }
+    else if (sliderThatWasMoved == chorus_feedback_slider.get())
+    {
+        //[UserSliderCode_chorus_feedback_slider] -- add your slider handling code here..
+        ManfredSynthAudioProcessor::chorus.setFeedback(sliderThatWasMoved->getValue());
+        //[/UserSliderCode_chorus_feedback_slider]
+    }
+    else if (sliderThatWasMoved == chorus_mix_slider.get())
+    {
+        //[UserSliderCode_chorus_mix_slider] -- add your slider handling code here..
+        ManfredSynthAudioProcessor::chorus.setMix(sliderThatWasMoved->getValue());
+        //[/UserSliderCode_chorus_mix_slider]
     }
 
     //[UsersliderValueChanged_Post]
@@ -216,8 +369,23 @@ BEGIN_JUCER_METADATA
   <BACKGROUND backgroundColour="ff323e44">
     <RECT pos="212 28 164 140" fill="solid: 8a2aa5" hasStroke="1" stroke="5, mitered, butt"
           strokeColour="solid: ff008000"/>
-    <RECT pos="380 28 164 140" fill="solid: 8a2aa5" hasStroke="1" stroke="5, mitered, butt"
+    <RECT pos="380 28 164 404" fill="solid: 8a2aa5" hasStroke="1" stroke="5, mitered, butt"
           strokeColour="solid: ff008000"/>
+    <TEXT pos="396 84 80 26" fill="solid: fff0ffff" hasStroke="0" text="Rate (Hz)"
+          fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
+          italic="0" justification="33"/>
+    <TEXT pos="396 140 92 26" fill="solid: fff0ffff" hasStroke="0" text="Depth"
+          fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
+          italic="0" justification="33"/>
+    <TEXT pos="396 204 92 26" fill="solid: fff0ffff" hasStroke="0" text="Centre Delay (ms)"
+          fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
+          italic="0" justification="33"/>
+    <TEXT pos="396 268 92 26" fill="solid: fff0ffff" hasStroke="0" text="Feedback"
+          fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
+          italic="0" justification="33"/>
+    <TEXT pos="396 332 92 26" fill="solid: fff0ffff" hasStroke="0" text="Mix"
+          fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
+          italic="0" justification="33"/>
   </BACKGROUND>
   <COMBOBOX name="select instrument" id="5688c51200c22d75" memberName="instrument__comboBox"
             virtualName="" explicitFocusOrder="0" pos="44 36 100 30" editable="0"
@@ -225,18 +393,38 @@ BEGIN_JUCER_METADATA
             textWhenNoItems="(no choices)"/>
   <TOGGLEBUTTON name="Reverb" id="9c249a027efacc8c" memberName="reverb__toggleButton"
                 virtualName="" explicitFocusOrder="0" pos="224 40 100 24" buttonText="Reverb"
-                connectedEdges="0" needsCallback="0" radioGroupId="0" state="0"/>
+                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
   <TOGGLEBUTTON name="Chorus" id="a22b8495be480f90" memberName="chorus__toggleButton"
                 virtualName="" explicitFocusOrder="0" pos="416 40 100 24" buttonText="Chorus"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
   <SLIDER name="Reverb Slider" id="68b3e1a880e8c145" memberName="reverb__slider"
-          virtualName="" explicitFocusOrder="0" pos="224 80 150 72" thumbcol="ff008000"
-          min="0.0" max="10.0" int="0.0" style="RotaryHorizontalVerticalDrag"
+          virtualName="" explicitFocusOrder="0" pos="216 80 150 72" thumbcol="ff008000"
+          min="1.0" max="100.0" int="1.0" style="RotaryHorizontalVerticalDrag"
           textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
-  <SLIDER name="Chorus Slider" id="9d4288d814062297" memberName="chorus__slider"
-          virtualName="" explicitFocusOrder="0" pos="392 80 150 72" min="0.0"
-          max="10.0" int="0.0" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
+  <SLIDER name="Chorus Rate Slider" id="9d4288d814062297" memberName="chorus_rate_slider"
+          virtualName="" explicitFocusOrder="0" pos="392 80 150 72" min="1.0"
+          max="99.0" int="1.0" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
+  <SLIDER name="Chorus Depth Slider" id="d172cd517d235994" memberName="chorus_depth_slider"
+          virtualName="" explicitFocusOrder="0" pos="392 144 150 72" min="0.0"
+          max="1.0" int="0.01" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
+  <SLIDER name="Chorus CentreDelay Slider" id="7e09c0474e28e150" memberName="chorus_centredelay_slider"
+          virtualName="" explicitFocusOrder="0" pos="392 208 150 72" min="0.0"
+          max="100.0" int="1.0" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
+  <SLIDER name="Chorus Feedback Slider" id="c8f3fac5cde63f07" memberName="chorus_feedback_slider"
+          virtualName="" explicitFocusOrder="0" pos="392 272 150 72" min="-1.0"
+          max="1.0" int="0.01" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
+  <SLIDER name="Chorus Mix Slider" id="28a4bd3fd08aa70f" memberName="chorus_mix_slider"
+          virtualName="" explicitFocusOrder="0" pos="392 336 150 72" min="0.0"
+          max="1.0" int="0.01" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
 </JUCER_COMPONENT>

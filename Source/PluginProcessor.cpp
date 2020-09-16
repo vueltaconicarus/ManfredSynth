@@ -8,6 +8,11 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "ManfredSynthGUI.h"
+
+
+bool ManfredSynthAudioProcessor::doChorus = CHORUSENABLE;
+juce::dsp::Chorus<float> ManfredSynthAudioProcessor::chorus;    // Chorus effect
 
 struct SineWaveSound : public juce::SynthesiserSound
 {
@@ -202,14 +207,16 @@ void ManfredSynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
     spec.sampleRate = sampleRate;
     spec.numChannels = getNumOutputChannels();
     chorus.prepare(spec);
-    chorus.setCentreDelay(70.);
-    chorus.setDepth(0.7);
-    chorus.setFeedback(1.);
-    chorus.setMix(1.);
-    chorus.setRate(5.);
-
+    
     // MV: prepare dummy JUCE synthesizer
     synth.setCurrentPlaybackSampleRate(sampleRate);
+
+    // MV: define default parameters of the chorus
+    chorus.setCentreDelay(CHORUSCENTREDELAY);
+    chorus.setFeedback(CHORUSFEEDBACK);
+    chorus.setMix(CHORUSMIX);
+    chorus.setRate(CHORUSRATE);
+    chorus.setDepth(CHORUSDEPTH);
 
 }
 
@@ -301,11 +308,16 @@ void ManfredSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
     midiMessages.swapWith(processedMidi);
 
+    // play synth sound according to MIDI message
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
-    chorus.process(context);
+
+    // add Chorus effect
+    if (doChorus) { 
+        chorus.process(context);
+    }
+    //chorus.process(context);
 
 }
 

@@ -55,11 +55,13 @@ public:
 
     // MV ===========================================================================
     float noteOnVel; // to store the incoming MIDI velocity
-    juce::dsp::Chorus<float> chorus; // 
-    juce::Synthesiser synth;
+    static juce::dsp::Chorus<float> chorus;    // Chorus effect
+    juce::Synthesiser synth;            // built-in synth, to be replaced by a third-party one
 
-
+    static bool doChorus; // 1: apply the chorus effect; 0: don't
+    
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ManfredSynthAudioProcessor)
 };
+

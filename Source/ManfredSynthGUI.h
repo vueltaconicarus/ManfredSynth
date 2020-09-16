@@ -21,6 +21,14 @@
 
 //[Headers]     -- You can add your own extra header files here --
 #include <JuceHeader.h>
+// start values of the chorus effect
+#define CHORUSENABLE 0
+#define CHORUSRATE 5
+#define CHORUSDEPTH 0.2
+#define CHORUSCENTREDELAY 10
+#define CHORUSFEEDBACK 0
+#define CHORUSMIX 0.5
+
 //[/Headers]
 
 
@@ -64,7 +72,11 @@ private:
     std::unique_ptr<juce::ToggleButton> reverb__toggleButton;
     std::unique_ptr<juce::ToggleButton> chorus__toggleButton;
     std::unique_ptr<juce::Slider> reverb__slider;
-    std::unique_ptr<juce::Slider> chorus__slider;
+    std::unique_ptr<juce::Slider> chorus_rate_slider;
+    std::unique_ptr<juce::Slider> chorus_depth_slider;
+    std::unique_ptr<juce::Slider> chorus_centredelay_slider;
+    std::unique_ptr<juce::Slider> chorus_feedback_slider;
+    std::unique_ptr<juce::Slider> chorus_mix_slider;
 
 
     //==============================================================================

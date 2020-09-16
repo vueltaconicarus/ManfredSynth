@@ -23,7 +23,7 @@ ManfredSynthAudioProcessorEditor::ManfredSynthAudioProcessorEditor (ManfredSynth
     midiVolume.setTextBoxStyle(juce::Slider::NoTextBox, false, 90, 0);
     midiVolume.setPopupDisplayEnabled(true, false, this);
     midiVolume.setTextValueSuffix(" MIDI Volume");
-    midiVolume.setValue(1.0);
+    midiVolume.setValue(50.0);
 
     // MV: this function adds the slider to the editor
     addAndMakeVisible(&midiVolume);
@@ -31,9 +31,8 @@ ManfredSynthAudioProcessorEditor::ManfredSynthAudioProcessorEditor (ManfredSynth
     // MV: slider listener
     midiVolume.addListener(this);
 
-    // display gui elements
-    addAndMakeVisible(&gui);
-    
+    // MV: display gui elements
+    addAndMakeVisible(&gui);   
 }
 
 ManfredSynthAudioProcessorEditor::~ManfredSynthAudioProcessorEditor()
@@ -43,7 +42,7 @@ ManfredSynthAudioProcessorEditor::~ManfredSynthAudioProcessorEditor()
 // MV: this is the listener function that sets our public processor volume variable
 void ManfredSynthAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
 {
-    audioProcessor.noteOnVel = midiVolume.getValue();
+    //audioProcessor.noteOnVel = midiVolume.getValue();
 }
 
 

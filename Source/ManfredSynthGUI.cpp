@@ -101,7 +101,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     //[UserPreSize]
     chorusEnableAttachment.reset(new ButtonAttachment(valueTreeState, "chorusEnable", *chorus__toggleButton.get()));
-    chorusRateAttachment  .reset(new SliderAttachment(valueTreeState, "chorusRate",   *chorus_rate_slider  .get()));
+    chorusRateAttachment.reset(new SliderAttachment(valueTreeState, "chorusRate", *chorus_rate_slider.get()));
     //chorusDepthAttachment .reset(new SliderAttachment(valueTreeState, "chorusDepth",  *chorus_depth_slider .get()));
     //[/UserPreSize]
 
@@ -130,6 +130,9 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 ManfredSynthGUI::~ManfredSynthGUI()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
+    chorusEnableAttachment = nullptr;
+    chorusRateAttachment = nullptr;
+    chorusDepthAttachment = nullptr;
     //[/Destructor_pre]
 
     instrument__comboBox = nullptr;
@@ -142,6 +145,7 @@ ManfredSynthGUI::~ManfredSynthGUI()
 
 
     //[Destructor]. You can add your own custom destruction code here..
+
     //[/Destructor]
 }
 

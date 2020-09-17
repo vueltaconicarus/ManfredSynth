@@ -48,7 +48,7 @@ class ManfredSynthGUI  : public juce::Component,
 {
 public:
     //==============================================================================
-    ManfredSynthGUI (juce::AudioProcessorValueTreeState&);
+    ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts);
     ~ManfredSynthGUI() override;
 
     //==============================================================================
@@ -67,7 +67,7 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    
+
     // Shortcuts for long commands
     typedef juce::AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
     typedef juce::AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
@@ -82,9 +82,7 @@ private:
 
     //==============================================================================
     std::unique_ptr<juce::ComboBox> instrument__comboBox;
-    std::unique_ptr<juce::ToggleButton> reverb__toggleButton;
     std::unique_ptr<juce::ToggleButton> chorus__toggleButton;
-    std::unique_ptr<juce::Slider> reverb__slider;
     std::unique_ptr<juce::Slider> chorus_rate_slider;
     std::unique_ptr<juce::Slider> chorus_depth_slider;
     std::unique_ptr<juce::Slider> chorus_centredelay_slider;

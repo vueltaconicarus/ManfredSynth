@@ -47,27 +47,11 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     instrument__comboBox->setBounds (44, 36, 100, 30);
 
-    reverb__toggleButton.reset (new juce::ToggleButton ("Reverb"));
-    addAndMakeVisible (reverb__toggleButton.get());
-    reverb__toggleButton->addListener (this);
-
-    reverb__toggleButton->setBounds (224, 40, 100, 24);
-
     chorus__toggleButton.reset (new juce::ToggleButton ("Chorus"));
     addAndMakeVisible (chorus__toggleButton.get());
     chorus__toggleButton->addListener (this);
 
     chorus__toggleButton->setBounds (416, 40, 100, 24);
-
-    reverb__slider.reset (new juce::Slider ("Reverb Slider"));
-    addAndMakeVisible (reverb__slider.get());
-    reverb__slider->setRange (1, 100, 1);
-    reverb__slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
-    reverb__slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
-    reverb__slider->setColour (juce::Slider::thumbColourId, juce::Colours::green);
-    reverb__slider->addListener (this);
-
-    reverb__slider->setBounds (216, 80, 150, 72);
 
     chorus_rate_slider.reset (new juce::Slider ("Chorus Rate Slider"));
     addAndMakeVisible (chorus_rate_slider.get());
@@ -147,9 +131,7 @@ ManfredSynthGUI::~ManfredSynthGUI()
     //[/Destructor_pre]
 
     instrument__comboBox = nullptr;
-    reverb__toggleButton = nullptr;
     chorus__toggleButton = nullptr;
-    reverb__slider = nullptr;
     chorus_rate_slider = nullptr;
     chorus_depth_slider = nullptr;
     chorus_centredelay_slider = nullptr;
@@ -168,16 +150,6 @@ void ManfredSynthGUI::paint (juce::Graphics& g)
     //[/UserPrePaint]
 
     g.fillAll (juce::Colour (0xff323e44));
-
-    {
-        int x = 212, y = 28, width = 164, height = 140;
-        juce::Colour strokeColour = juce::Colours::green;
-        //[UserPaintCustomArguments] Customize the painting arguments here..
-        //[/UserPaintCustomArguments]
-        g.setColour (strokeColour);
-        g.drawRect (x, y, width, height, 5);
-
-    }
 
     {
         int x = 380, y = 28, width = 164, height = 404;
@@ -282,12 +254,7 @@ void ManfredSynthGUI::buttonClicked (juce::Button* buttonThatWasClicked)
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
 
-    if (buttonThatWasClicked == reverb__toggleButton.get())
-    {
-        //[UserButtonCode_reverb__toggleButton] -- add your button handler code here..
-        //[/UserButtonCode_reverb__toggleButton]
-    }
-    else if (buttonThatWasClicked == chorus__toggleButton.get())
+    if (buttonThatWasClicked == chorus__toggleButton.get())
     {
         //[UserButtonCode_chorus__toggleButton] -- add your button handler code here..
         bool enabled = buttonThatWasClicked->getToggleState();  // read the new value into local variable
@@ -309,12 +276,7 @@ void ManfredSynthGUI::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     //[UsersliderValueChanged_Pre]
     //[/UsersliderValueChanged_Pre]
 
-    if (sliderThatWasMoved == reverb__slider.get())
-    {
-        //[UserSliderCode_reverb__slider] -- add your slider handling code here..
-        //[/UserSliderCode_reverb__slider]
-    }
-    else if (sliderThatWasMoved == chorus_rate_slider.get())
+    if (sliderThatWasMoved == chorus_rate_slider.get())
     {
         //[UserSliderCode_chorus_rate_slider] -- add your slider handling code here..
         ManfredSynthAudioProcessor::chorus.setRate(sliderThatWasMoved->getValue());
@@ -365,12 +327,11 @@ void ManfredSynthGUI::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="ManfredSynthGUI" componentName=""
-                 parentClasses="public juce::Component" constructorParams="" variableInitialisers=""
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="0" initialWidth="600" initialHeight="400">
+                 parentClasses="public juce::Component" constructorParams="juce::AudioProcessorValueTreeState&amp; vts"
+                 variableInitialisers="valueTreeState (vts)" snapPixels="8" snapActive="1"
+                 snapShown="1" overlayOpacity="0.330" fixedSize="0" initialWidth="600"
+                 initialHeight="400">
   <BACKGROUND backgroundColour="ff323e44">
-    <RECT pos="212 28 164 140" fill="solid: 8a2aa5" hasStroke="1" stroke="5, mitered, butt"
-          strokeColour="solid: ff008000"/>
     <RECT pos="380 28 164 404" fill="solid: 8a2aa5" hasStroke="1" stroke="5, mitered, butt"
           strokeColour="solid: ff008000"/>
     <TEXT pos="396 84 80 26" fill="solid: fff0ffff" hasStroke="0" text="Rate (Hz)"
@@ -393,17 +354,9 @@ BEGIN_JUCER_METADATA
             virtualName="" explicitFocusOrder="0" pos="44 36 100 30" editable="0"
             layout="33" items="Flute&#10;Guitar&#10;Piano" textWhenNonSelected=""
             textWhenNoItems="(no choices)"/>
-  <TOGGLEBUTTON name="Reverb" id="9c249a027efacc8c" memberName="reverb__toggleButton"
-                virtualName="" explicitFocusOrder="0" pos="224 40 100 24" buttonText="Reverb"
-                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
   <TOGGLEBUTTON name="Chorus" id="a22b8495be480f90" memberName="chorus__toggleButton"
                 virtualName="" explicitFocusOrder="0" pos="416 40 100 24" buttonText="Chorus"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
-  <SLIDER name="Reverb Slider" id="68b3e1a880e8c145" memberName="reverb__slider"
-          virtualName="" explicitFocusOrder="0" pos="216 80 150 72" thumbcol="ff008000"
-          min="1.0" max="100.0" int="1.0" style="RotaryHorizontalVerticalDrag"
-          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="Chorus Rate Slider" id="9d4288d814062297" memberName="chorus_rate_slider"
           virtualName="" explicitFocusOrder="0" pos="392 80 150 72" min="1.0"
           max="99.0" int="1.0" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"

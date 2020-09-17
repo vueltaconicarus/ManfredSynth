@@ -54,7 +54,6 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     // MV ===========================================================================
-    float noteOnVel; // to store the incoming MIDI velocity
     static juce::dsp::Chorus<float> chorus;    // Chorus effect
     juce::Synthesiser synth;            // built-in synth, to be replaced by a third-party one
 
@@ -62,6 +61,8 @@ public:
     
 private:
     //==============================================================================
+
+        
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ManfredSynthAudioProcessor)
 };
 

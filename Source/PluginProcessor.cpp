@@ -110,8 +110,8 @@ private:
 
 //==============================================================================
 ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
-#ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
+ #ifndef JucePlugin_PreferredChannelConfigurations
+    : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
@@ -119,14 +119,17 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        )
-#endif
-{
+#endif */
+{    
     synth.addSound(new SineWaveSound());
-    for (int i = 0; i < 2; ++i)
+    for (int i = 0; i < 6; ++i)
     {
         synth.addVoice(new SineWaveVoice());
     }
-    
+ 
+    //addParameter(boolParameter = new juce::AudioParameterBool(   "boolParameter", // parameterID
+    //                                                            "Chorus Enable", // parameter name
+    //                                                             0)); // default value
 }
 
 ManfredSynthAudioProcessor::~ManfredSynthAudioProcessor()
@@ -290,8 +293,7 @@ void ManfredSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     {
         if (m.isNoteOn())
         {
-            uint8_t newVel = (uint8_t)noteOnVel;
-            m = juce::MidiMessage::noteOn(m.getChannel(), m.getNoteNumber(), newVel);
+            //m = juce::MidiMessage::noteOn(m.getChannel(), m.getNoteNumber(), newVel);
         }
         else if (m.isNoteOff())
         {

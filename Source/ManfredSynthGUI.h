@@ -53,6 +53,8 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+    typedef juce::AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+    typedef juce::AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
     //[/UserMethods]
 
     void paint (juce::Graphics& g) override;
@@ -65,6 +67,7 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+    
     //[/UserVariables]
 
     //==============================================================================

@@ -57,7 +57,7 @@ public:
     static juce::dsp::Chorus<float> chorus;    // Chorus effect
     juce::Synthesiser synth;            // built-in synth, to be replaced by a third-party one
 
-    static bool doChorus; // 1: apply the chorus effect; 0: don't
+    //static bool doChorus; // 1: apply the chorus effect; 0: don't
     
 private:
     //==============================================================================
@@ -65,6 +65,7 @@ private:
     // define a APVTS for our plugin parameters
     juce::AudioProcessorValueTreeState parameters;
     std::atomic<float>* chorusEnableParameter = nullptr;
+    std::atomic<float>* chorusRateParameter   = nullptr;
         
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ManfredSynthAudioProcessor)
 };

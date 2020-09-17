@@ -55,7 +55,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     chorus_rate_slider.reset (new juce::Slider ("Chorus Rate Slider"));
     addAndMakeVisible (chorus_rate_slider.get());
-    chorus_rate_slider->setRange (1, 99, 1);
+    chorus_rate_slider->setRange (0, 100, 0.1);
     chorus_rate_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
     chorus_rate_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     chorus_rate_slider->addListener (this);
@@ -101,6 +101,8 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     //[UserPreSize]
     chorusEnableAttachment.reset(new ButtonAttachment(valueTreeState, "chorusEnable", *chorus__toggleButton.get()));
+    chorusRateAttachment  .reset(new SliderAttachment(valueTreeState, "chorusRate",   *chorus_rate_slider  .get()));
+    //chorusDepthAttachment .reset(new SliderAttachment(valueTreeState, "chorusDepth",  *chorus_depth_slider .get()));
     //[/UserPreSize]
 
     setSize (600, 400);
@@ -115,7 +117,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
     chorus_mix_slider->setValue(CHORUSMIX);
 
     // set initial enable state of the components
-    ManfredSynthAudioProcessor::doChorus = CHORUSENABLE;
+    //ManfredSynthAudioProcessor::doChorus = CHORUSENABLE;
     chorus_centredelay_slider->setEnabled(CHORUSENABLE);
     chorus_depth_slider->setEnabled(CHORUSENABLE);
     chorus_rate_slider->setEnabled(CHORUSENABLE);
@@ -258,7 +260,7 @@ void ManfredSynthGUI::buttonClicked (juce::Button* buttonThatWasClicked)
     {
         //[UserButtonCode_chorus__toggleButton] -- add your button handler code here..
         bool enabled = buttonThatWasClicked->getToggleState();  // read the new value into local variable
-        ManfredSynthAudioProcessor::doChorus = enabled;         // make new state available to the audio thread
+        //ManfredSynthAudioProcessor::doChorus = enabled;         // make new state available to the audio thread
         chorus_centredelay_slider->setEnabled(enabled);         // Enable or disable the corresponding parameter sliders
         chorus_depth_slider->setEnabled(enabled);
         chorus_rate_slider->setEnabled(enabled);
@@ -280,6 +282,7 @@ void ManfredSynthGUI::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     {
         //[UserSliderCode_chorus_rate_slider] -- add your slider handling code here..
         ManfredSynthAudioProcessor::chorus.setRate(sliderThatWasMoved->getValue());
+        //ManfredSynthAudioProcessor::chorus.setRate(*valueTreeState.getRawParameterValue("chorusRate"));
         //[/UserSliderCode_chorus_rate_slider]
     }
     else if (sliderThatWasMoved == chorus_depth_slider.get())
@@ -358,8 +361,8 @@ BEGIN_JUCER_METADATA
                 virtualName="" explicitFocusOrder="0" pos="416 40 100 24" buttonText="Chorus"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
   <SLIDER name="Chorus Rate Slider" id="9d4288d814062297" memberName="chorus_rate_slider"
-          virtualName="" explicitFocusOrder="0" pos="392 80 150 72" min="1.0"
-          max="99.0" int="1.0" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
+          virtualName="" explicitFocusOrder="0" pos="392 80 150 72" min="0.0"
+          max="100.0" int="0.1" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <SLIDER name="Chorus Depth Slider" id="d172cd517d235994" memberName="chorus_depth_slider"

@@ -77,6 +77,8 @@ private:
 
     // Component attachments
     std::unique_ptr<ButtonAttachment> chorusEnableAttachment;
+    std::unique_ptr<SliderAttachment> chorusRateAttachment;
+    std::unique_ptr<SliderAttachment> chorusDepthAttachment;
 
     //[/UserVariables]
 

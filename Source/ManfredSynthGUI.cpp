@@ -116,6 +116,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
 
     //[UserPreSize]
+    chorusEnableAttachment.reset(new ButtonAttachment(valueTreeState, "chorusEnable", *chorus__toggleButton.get()));
     //[/UserPreSize]
 
     setSize (600, 400);

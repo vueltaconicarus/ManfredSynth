@@ -125,7 +125,7 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
         {
             std::make_unique<juce::AudioParameterBool>("chorusEnable",      // parameterID
                                                         "Chorus Enable",     // parameter name
-                                                        false)              // default value
+                                                        CHORUSENABLE)              // default value
         })
 {    
     synth.addSound(new SineWaveSound());
@@ -134,9 +134,7 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
         synth.addVoice(new SineWaveVoice());
     }
  
-    //addParameter(boolParameter = new juce::AudioParameterBool(   "boolParameter", // parameterID
-    //                                                            "Chorus Enable", // parameter name
-    //                                                             0)); // default value
+    chorusEnableParameter = parameters.getRawParameterValue("chorusEnable");
 }
 
 ManfredSynthAudioProcessor::~ManfredSynthAudioProcessor()
@@ -323,10 +321,11 @@ void ManfredSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     juce::dsp::ProcessContextReplacing<float> context(block);
 
     // add Chorus effect
-    if (doChorus) { 
+    // alternative: if (*parameters.getRawParameterValue("chorusEnable"))
+    if (*chorusEnableParameter)
+    {
         chorus.process(context);
     }
-    //chorus.process(context);
 
 }
 

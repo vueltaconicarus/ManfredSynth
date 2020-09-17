@@ -10,8 +10,8 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-ManfredSynthAudioProcessorEditor::ManfredSynthAudioProcessorEditor (ManfredSynthAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+ManfredSynthAudioProcessorEditor::ManfredSynthAudioProcessorEditor (ManfredSynthAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
+    : AudioProcessorEditor (&p), audioProcessor (p), valueTreeState (vts), gui(vts)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.

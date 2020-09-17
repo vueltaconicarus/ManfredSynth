@@ -48,7 +48,7 @@ class ManfredSynthGUI  : public juce::Component,
 {
 public:
     //==============================================================================
-    ManfredSynthGUI ();
+    ManfredSynthGUI (juce::AudioProcessorValueTreeState&);
     ~ManfredSynthGUI() override;
 
     //==============================================================================
@@ -68,6 +68,16 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     
+    // Shortcuts for long commands
+    typedef juce::AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+    typedef juce::AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
+
+    // this holds the APVTS which originated in the processor, and came here via the editor
+    juce::AudioProcessorValueTreeState& valueTreeState;
+
+    // Component attachments
+    std::unique_ptr<ButtonAttachment> chorusEnableAttachment;
+
     //[/UserVariables]
 
     //==============================================================================

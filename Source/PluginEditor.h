@@ -19,7 +19,7 @@
 class ManfredSynthAudioProcessorEditor  :   public juce::AudioProcessorEditor
 {
 public:
-    ManfredSynthAudioProcessorEditor (ManfredSynthAudioProcessor&);
+    ManfredSynthAudioProcessorEditor (ManfredSynthAudioProcessor&, juce::AudioProcessorValueTreeState&);
     ~ManfredSynthAudioProcessorEditor() override;
 
     //==============================================================================
@@ -33,6 +33,10 @@ private:
     // access the processor object that created it.
     ManfredSynthAudioProcessor& audioProcessor;
 
+    // This holds the APVTS which comes from the processor, and is handed over to the GUI
+    juce::AudioProcessorValueTreeState& valueTreeState;
+
+    // This is an instance of my gui class, the "main component"
     ManfredSynthGUI gui;
 
     

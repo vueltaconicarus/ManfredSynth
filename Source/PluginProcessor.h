@@ -61,7 +61,10 @@ public:
     
 private:
     //==============================================================================
-
+    
+    // define a APVTS for our plugin parameters
+    juce::AudioProcessorValueTreeState parameters;
+    std::atomic<float>* chorusEnableParameter = nullptr;
         
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ManfredSynthAudioProcessor)
 };

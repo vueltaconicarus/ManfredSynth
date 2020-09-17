@@ -28,7 +28,8 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-ManfredSynthGUI::ManfredSynthGUI ()
+ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
+    : valueTreeState (vts)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]

@@ -110,16 +110,23 @@ private:
 
 //==============================================================================
 ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
- #ifndef JucePlugin_PreferredChannelConfigurations
-    : AudioProcessor (BusesProperties()
+    :
+#ifndef JucePlugin_PreferredChannelConfigurations
+     AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
 #endif */
+    parameters(*this, nullptr, juce::Identifier("ManfredSynth"),
+        {
+            std::make_unique<juce::AudioParameterBool>("chorusEnable",      // parameterID
+                                                        "Chorus Enable",     // parameter name
+                                                        false)              // default value
+        })
 {    
     synth.addSound(new SineWaveSound());
     for (int i = 0; i < 6; ++i)
@@ -331,7 +338,7 @@ bool ManfredSynthAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* ManfredSynthAudioProcessor::createEditor()
 {
-    return new ManfredSynthAudioProcessorEditor (*this);
+    return new ManfredSynthAudioProcessorEditor (*this, parameters);
 }
 
 //==============================================================================

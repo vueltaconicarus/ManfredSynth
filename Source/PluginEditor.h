@@ -16,7 +16,8 @@
 //==============================================================================
 /**
 */
-class ManfredSynthAudioProcessorEditor  :   public juce::AudioProcessorEditor
+class ManfredSynthAudioProcessorEditor  :   public juce::AudioProcessorEditor,
+                                            public juce::AudioProcessorValueTreeState::Listener
 {
 public:
     ManfredSynthAudioProcessorEditor (ManfredSynthAudioProcessor&, juce::AudioProcessorValueTreeState&);
@@ -26,6 +27,7 @@ public:
 
     void paint (juce::Graphics&) override;
     void resized() override;
+    void parameterChanged(const juce::String&, float) override;
 
 private:
 

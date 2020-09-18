@@ -102,7 +102,6 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
     //[UserPreSize]
     chorusEnableAttachment.reset(new ButtonAttachment(valueTreeState, "chorusEnable", *chorus__toggleButton.get()));
     chorusRateAttachment.reset(new SliderAttachment(valueTreeState, "chorusRate", *chorus_rate_slider.get()));
-    //chorusDepthAttachment .reset(new SliderAttachment(valueTreeState, "chorusDepth",  *chorus_depth_slider .get()));
     //[/UserPreSize]
 
     setSize (600, 400);
@@ -130,6 +129,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 ManfredSynthGUI::~ManfredSynthGUI()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
+    // Destroy attachments BEFORE their components
     chorusEnableAttachment = nullptr;
     chorusRateAttachment = nullptr;
     chorusDepthAttachment = nullptr;
@@ -285,7 +285,7 @@ void ManfredSynthGUI::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == chorus_rate_slider.get())
     {
         //[UserSliderCode_chorus_rate_slider] -- add your slider handling code here..
-        ManfredSynthAudioProcessor::chorus.setRate(sliderThatWasMoved->getValue());
+        //ManfredSynthAudioProcessor::chorus.setRate(sliderThatWasMoved->getValue());
         //ManfredSynthAudioProcessor::chorus.setRate(*valueTreeState.getRawParameterValue("chorusRate"));
         //[/UserSliderCode_chorus_rate_slider]
     }

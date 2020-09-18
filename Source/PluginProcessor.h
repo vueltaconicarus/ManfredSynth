@@ -13,7 +13,7 @@
 //==============================================================================
 /**
 */
-class ManfredSynthAudioProcessor  : public juce::AudioProcessor
+class ManfredSynthAudioProcessor  : public juce::AudioProcessor                                    
 {
 public:
     //==============================================================================

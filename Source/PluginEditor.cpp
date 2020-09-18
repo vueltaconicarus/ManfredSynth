@@ -19,11 +19,22 @@ ManfredSynthAudioProcessorEditor::ManfredSynthAudioProcessorEditor (ManfredSynth
 
     // MV: display gui elements
     addAndMakeVisible(&gui);
+
+    // MV: add listeners
+    valueTreeState.addParameterListener("chorusRate", this);
+
   }
 
 ManfredSynthAudioProcessorEditor::~ManfredSynthAudioProcessorEditor()
 {
 }
+
+void ManfredSynthAudioProcessorEditor::parameterChanged(const juce::String& parameterID, float newValue)
+{
+        if (parameterID == "chorusRate") { audioProcessor.chorus.setRate(newValue); }
+    return;
+}
+
 
 //==============================================================================
 void ManfredSynthAudioProcessorEditor::paint (juce::Graphics& g)

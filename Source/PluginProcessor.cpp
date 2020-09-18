@@ -236,7 +236,6 @@ void ManfredSynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
     chorus.setMix(CHORUSMIX);
     chorus.setRate(CHORUSRATE);
     chorus.setDepth(CHORUSDEPTH);
-
 }
 
 void ManfredSynthAudioProcessor::releaseResources()

@@ -55,7 +55,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     chorus_rate_slider.reset (new juce::Slider ("Chorus Rate Slider"));
     addAndMakeVisible (chorus_rate_slider.get());
-    chorus_rate_slider->setRange (0, 100, 0.1);
+    chorus_rate_slider->setRange (0, 99, 0.1);
     chorus_rate_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
     chorus_rate_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     chorus_rate_slider->addListener (this);
@@ -73,7 +73,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     chorus_centredelay_slider.reset (new juce::Slider ("Chorus CentreDelay Slider"));
     addAndMakeVisible (chorus_centredelay_slider.get());
-    chorus_centredelay_slider->setRange (0, 100, 1);
+    chorus_centredelay_slider->setRange (0, 99, 0.1);
     chorus_centredelay_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
     chorus_centredelay_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
     chorus_centredelay_slider->addListener (this);
@@ -100,8 +100,12 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
 
     //[UserPreSize]
-    chorusEnableAttachment.reset(new ButtonAttachment(valueTreeState, "chorusEnable", *chorus__toggleButton.get()));
-    chorusRateAttachment.reset(new SliderAttachment(valueTreeState, "chorusRate", *chorus_rate_slider.get()));
+    chorusEnableAttachment      .reset(new ButtonAttachment(valueTreeState, "chorusEnable",         *chorus__toggleButton.get()));
+    chorusRateAttachment        .reset(new SliderAttachment(valueTreeState, "chorusRate",           *chorus_rate_slider.get()));
+    chorusDepthAttachment       .reset(new SliderAttachment(valueTreeState, "chorusDepth",          *chorus_depth_slider.get()));
+    chorusCentreDelayAttachment .reset(new SliderAttachment(valueTreeState, "chorusCentreDelay",    *chorus_centredelay_slider.get()));
+    chorusFeedbackAttachment    .reset(new SliderAttachment(valueTreeState, "chorusFeedback",       *chorus_feedback_slider.get()));
+    chorusMixAttachment         .reset(new SliderAttachment(valueTreeState, "chorusMix",            *chorus_mix_slider.get()));
     //[/UserPreSize]
 
     setSize (600, 400);
@@ -130,9 +134,12 @@ ManfredSynthGUI::~ManfredSynthGUI()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
     // Destroy attachments BEFORE their components
-    chorusEnableAttachment = nullptr;
-    chorusRateAttachment = nullptr;
-    chorusDepthAttachment = nullptr;
+    chorusEnableAttachment      = nullptr;
+    chorusRateAttachment        = nullptr;
+    chorusDepthAttachment       = nullptr;
+    chorusCentreDelayAttachment = nullptr;
+    chorusFeedbackAttachment    = nullptr;
+    chorusMixAttachment         = nullptr;
     //[/Destructor_pre]
 
     instrument__comboBox = nullptr;
@@ -292,25 +299,25 @@ void ManfredSynthGUI::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     else if (sliderThatWasMoved == chorus_depth_slider.get())
     {
         //[UserSliderCode_chorus_depth_slider] -- add your slider handling code here..
-        ManfredSynthAudioProcessor::chorus.setDepth(sliderThatWasMoved->getValue());
+        //ManfredSynthAudioProcessor::chorus.setDepth(sliderThatWasMoved->getValue());
         //[/UserSliderCode_chorus_depth_slider]
     }
     else if (sliderThatWasMoved == chorus_centredelay_slider.get())
     {
         //[UserSliderCode_chorus_centredelay_slider] -- add your slider handling code here..
-        ManfredSynthAudioProcessor::chorus.setCentreDelay(sliderThatWasMoved->getValue());
+        //ManfredSynthAudioProcessor::chorus.setCentreDelay(sliderThatWasMoved->getValue());
         //[/UserSliderCode_chorus_centredelay_slider]
     }
     else if (sliderThatWasMoved == chorus_feedback_slider.get())
     {
         //[UserSliderCode_chorus_feedback_slider] -- add your slider handling code here..
-        ManfredSynthAudioProcessor::chorus.setFeedback(sliderThatWasMoved->getValue());
+        //ManfredSynthAudioProcessor::chorus.setFeedback(sliderThatWasMoved->getValue());
         //[/UserSliderCode_chorus_feedback_slider]
     }
     else if (sliderThatWasMoved == chorus_mix_slider.get())
     {
         //[UserSliderCode_chorus_mix_slider] -- add your slider handling code here..
-        ManfredSynthAudioProcessor::chorus.setMix(sliderThatWasMoved->getValue());
+        //ManfredSynthAudioProcessor::chorus.setMix(sliderThatWasMoved->getValue());
         //[/UserSliderCode_chorus_mix_slider]
     }
 
@@ -366,7 +373,7 @@ BEGIN_JUCER_METADATA
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
   <SLIDER name="Chorus Rate Slider" id="9d4288d814062297" memberName="chorus_rate_slider"
           virtualName="" explicitFocusOrder="0" pos="392 80 150 72" min="0.0"
-          max="100.0" int="0.1" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
+          max="99.0" int="0.1" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <SLIDER name="Chorus Depth Slider" id="d172cd517d235994" memberName="chorus_depth_slider"
@@ -376,7 +383,7 @@ BEGIN_JUCER_METADATA
           needsCallback="1"/>
   <SLIDER name="Chorus CentreDelay Slider" id="7e09c0474e28e150" memberName="chorus_centredelay_slider"
           virtualName="" explicitFocusOrder="0" pos="392 208 150 72" min="0.0"
-          max="100.0" int="1.0" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
+          max="99.0" int="0.1" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <SLIDER name="Chorus Feedback Slider" id="c8f3fac5cde63f07" memberName="chorus_feedback_slider"

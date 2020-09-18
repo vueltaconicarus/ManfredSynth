@@ -12,7 +12,21 @@
 
 
 //bool ManfredSynthAudioProcessor::doChorus = CHORUSENABLE;
-juce::dsp::Chorus<float> ManfredSynthAudioProcessor::chorus;    // Chorus effect
+
+void ManfredSynthAudioProcessor::parameterChanged(const juce::String& parameterID, float newValue)
+{
+    if (parameterID == "chorusRate")
+        chorus.setRate(newValue);
+    else if(parameterID == "chorusDepth")
+        chorus.setDepth(newValue);
+    else if (parameterID == "chorusCentreDelay")
+        chorus.setCentreDelay(newValue);
+    else if (parameterID == "chorusFeedback")
+        chorus.setFeedback(newValue);
+    else if (parameterID == "chorusMix")
+        chorus.setMix(newValue);
+}
+
 
 struct SineWaveSound : public juce::SynthesiserSound
 {
@@ -135,21 +149,57 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
                                                         "Chorus Depth",     // parameter name
                                                         0.0f,               // minimum
                                                         1.0f,             //maximum
-                                                        CHORUSDEPTH)              // default value
+                                                        CHORUSDEPTH),              // default value
+            std::make_unique<juce::AudioParameterFloat>("chorusCentreDelay",      // parameterID
+                                                        "Chorus Centre Dealy",     // parameter name
+                                                        1.0f,               // minimum
+                                                        100.0f,             //maximum
+                                                        CHORUSCENTREDELAY),              // default value
+            std::make_unique<juce::AudioParameterFloat>("chorusFeedback",      // parameterID
+                                                        "Chorus Feedback",     // parameter name
+                                                        -1.0f,               // minimum
+                                                        1.0f,             //maximum
+                                                        CHORUSFEEDBACK),              // default value
+            std::make_unique<juce::AudioParameterFloat>("chorusMix",      // parameterID
+                                                        "Chorus Mix",     // parameter name
+                                                        0.0f,               // minimum
+                                                        1.0f,             //maximum
+                                                        CHORUSMIX)              // default value
         })
 {    
+
+    //juce::dsp::Chorus<float> ManfredSynthAudioProcessor::chorus;    // Chorus effect
+
     synth.addSound(new SineWaveSound());
     for (int i = 0; i < 6; ++i)
     {
         synth.addVoice(new SineWaveVoice());
     }
  
-    chorusEnableParameter   = parameters.getRawParameterValue("chorusEnable");
-    chorusRateParameter     = parameters.getRawParameterValue("chorusRate");
+    chorusEnableParameter       = parameters.getRawParameterValue("chorusEnable");
+    chorusRateParameter         = parameters.getRawParameterValue("chorusRate");
+    chorusDepthParameter        = parameters.getRawParameterValue("chorusDepth");
+    chorusCentreDelayParameter  = parameters.getRawParameterValue("chorusCentreDelay");
+    chorusFeedbackParameter     = parameters.getRawParameterValue("chorusFeedback");
+    chorusMixParameter          = parameters.getRawParameterValue("chorusMix");
+
+    // MV: add listeners
+    parameters.addParameterListener("chorusRate", this);
+    parameters.addParameterListener("chorusDepth", this);
+    parameters.addParameterListener("chorusCentreDelay", this);
+    parameters.addParameterListener("chorusFeedback", this);
+    parameters.addParameterListener("chorusMix", this);
+
+
 }
 
 ManfredSynthAudioProcessor::~ManfredSynthAudioProcessor()
 {
+    parameters.removeParameterListener("chorusRate", this);
+    parameters.removeParameterListener("chorusDepth", this);
+    parameters.removeParameterListener("chorusCentreDelay", this);
+    parameters.removeParameterListener("chorusFeedback", this);
+    parameters.removeParameterListener("chorusMix", this);
 }
 
 //==============================================================================

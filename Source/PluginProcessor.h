@@ -13,7 +13,8 @@
 //==============================================================================
 /**
 */
-class ManfredSynthAudioProcessor  : public juce::AudioProcessor                                    
+class ManfredSynthAudioProcessor  : public juce::AudioProcessor,
+                                    public juce::AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
@@ -54,16 +55,21 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     // MV ===========================================================================
-    static juce::dsp::Chorus<float> chorus;    // Chorus effect
+    juce::dsp::Chorus<float> chorus;    // Chorus effect
     juce::Synthesiser synth;            // built-in synth, to be replaced by a third-party one
+    void parameterChanged(const juce::String&, float) override;
     
 private:
     //==============================================================================
     
     // define a APVTS for our plugin parameters
     juce::AudioProcessorValueTreeState parameters;
-    std::atomic<float>* chorusEnableParameter = nullptr;
-    std::atomic<float>* chorusRateParameter   = nullptr;
+    std::atomic<float>* chorusEnableParameter       = nullptr;
+    std::atomic<float>* chorusRateParameter         = nullptr;
+    std::atomic<float>* chorusDepthParameter        = nullptr;
+    std::atomic<float>* chorusCentreDelayParameter  = nullptr;
+    std::atomic<float>* chorusFeedbackParameter     = nullptr;
+    std::atomic<float>* chorusMixParameter          = nullptr;
         
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ManfredSynthAudioProcessor)
 };

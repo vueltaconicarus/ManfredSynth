@@ -79,6 +79,9 @@ private:
     std::unique_ptr<ButtonAttachment> chorusEnableAttachment;
     std::unique_ptr<SliderAttachment> chorusRateAttachment;
     std::unique_ptr<SliderAttachment> chorusDepthAttachment;
+    std::unique_ptr<SliderAttachment> chorusCentreDelayAttachment;
+    std::unique_ptr<SliderAttachment> chorusFeedbackAttachment;
+    std::unique_ptr<SliderAttachment> chorusMixAttachment;
 
     //[/UserVariables]
 

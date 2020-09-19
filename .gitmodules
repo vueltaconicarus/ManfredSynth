@@ -4,6 +4,6 @@
 [submodule "ext/JUCE"]
 	path = ext/JUCE
 	url = https://github.com/juce-framework/JUCE
-[submodule "Maximilian"]
-	path = Maximilian
+[submodule "ext/Maximilian"]
+	path = ext/Maximilian
 	url = https://github.com/micknoise/Maximilian.git

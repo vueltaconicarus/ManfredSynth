@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "maximilian.h"
 
 //==============================================================================
 /**
@@ -78,6 +79,9 @@ private:
     std::atomic<float>* chorusCentreDelayParameter  = nullptr;
     std::atomic<float>* chorusFeedbackParameter     = nullptr;
     std::atomic<float>* chorusMixParameter          = nullptr;
+
+    // Maximilian
+    maxiOsc Oscillator;
 
         
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ManfredSynthAudioProcessor)

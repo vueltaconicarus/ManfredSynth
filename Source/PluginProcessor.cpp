@@ -9,7 +9,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "ManfredSynthGUI.h"
-
+#include "SynthSound.h"
+#include "SynthVoice.h"
 
 //bool ManfredSynthAudioProcessor::doChorus = CHORUSENABLE;
 
@@ -27,100 +28,6 @@ void ManfredSynthAudioProcessor::parameterChanged(const juce::String& parameterI
         chorus.setMix(newValue);     
 }
 
-
-struct SineWaveSound : public juce::SynthesiserSound
-{
-    SineWaveSound() {}
-
-    bool appliesToNote(int) override { return true; }
-    bool appliesToChannel(int) override { return true; }
-};
-
-struct SineWaveVoice : public juce::SynthesiserVoice
-{
-    SineWaveVoice() {}
-
-    bool canPlaySound(juce::SynthesiserSound* sound) override
-    {
-        return dynamic_cast<SineWaveSound*> (sound) != nullptr;
-    }
-
-    void startNote(int midiNoteNumber, float velocity,
-        juce::SynthesiserSound*, int /*currentPitchWheelPosition*/) override
-    {
-        currentAngle = 0.0;
-        level = velocity * 0.15;
-        tailOff = 0.0;
-
-        auto cyclesPerSecond = juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber);
-        auto cyclesPerSample = cyclesPerSecond / getSampleRate();
-
-        angleDelta = cyclesPerSample * 2.0 * juce::MathConstants<double>::pi;
-    }
-
-    void stopNote(float /*velocity*/, bool allowTailOff) override
-    {
-        if (allowTailOff)
-        {
-            if (tailOff == 0.0)
-                tailOff = 1.0;
-        }
-        else
-        {
-            clearCurrentNote();
-            angleDelta = 0.0;
-        }
-    }
-
-    void pitchWheelMoved(int) override {}
-    void controllerMoved(int, int) override {}
-
-    void renderNextBlock(juce::AudioSampleBuffer& outputBuffer, int startSample, int numSamples) override
-    {
-        if (angleDelta != 0.0)
-        {
-            if (tailOff > 0.0) // [7]
-            {
-                while (--numSamples >= 0)
-                {
-                    auto currentSample = (float)(std::sin(currentAngle) * level * tailOff);
-
-                    for (auto i = outputBuffer.getNumChannels(); --i >= 0;)
-                        outputBuffer.addSample(i, startSample, currentSample);
-
-                    currentAngle += angleDelta;
-                    ++startSample;
-
-                    tailOff *= 0.99; // [8]
-
-                    if (tailOff <= 0.005)
-                    {
-                        clearCurrentNote(); // [9]
-
-                        angleDelta = 0.0;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                while (--numSamples >= 0) // [6]
-                {
-                    auto currentSample = (float)(std::sin(currentAngle) * level);
-
-                    for (auto i = outputBuffer.getNumChannels(); --i >= 0;)
-                        outputBuffer.addSample(i, startSample, currentSample);
-
-                    currentAngle += angleDelta;
-                    ++startSample;
-                }
-            }
-        }
-    }
-
-private:
-    double currentAngle = 0.0, angleDelta = 0.0, level = 0.0, tailOff = 0.0;
-};
 
 //==============================================================================
 ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
@@ -143,7 +50,7 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
             std::make_unique<juce::AudioParameterFloat>("chorusRate",      // parameterID
                                                         "Chorus Rate",     // parameter name
                                                         0.0f,               // minimum
-                                                        100.0f,             //maximum
+                                                        99.0f,             //maximum
                                                         CHORUSRATE),              // default value
             std::make_unique<juce::AudioParameterFloat>("chorusDepth",      // parameterID
                                                         "Chorus Depth",     // parameter name
@@ -153,7 +60,7 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
             std::make_unique<juce::AudioParameterFloat>("chorusCentreDelay",      // parameterID
                                                         "Chorus Centre Dealy",     // parameter name
                                                         1.0f,               // minimum
-                                                        100.0f,             //maximum
+                                                        99.0f,             //maximum
                                                         CHORUSCENTREDELAY),              // default value
             std::make_unique<juce::AudioParameterFloat>("chorusFeedback",      // parameterID
                                                         "Chorus Feedback",     // parameter name
@@ -285,7 +192,7 @@ void ManfredSynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
     //chorus.setRate(CHORUSRATE);
     //chorus.setDepth(CHORUSDEPTH);
 
-    bool b = CHORUSENABLE;
+    //bool b = CHORUSENABLE;
 
 
 }
@@ -322,6 +229,7 @@ bool ManfredSynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layo
 
 void ManfredSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    float theWave = Oscillator.sinewave(440);
     buffer.clear();
 
     // play synth sound according to MIDI message

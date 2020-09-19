@@ -114,7 +114,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
     //[Constructor] You can add your own custom stuff here..
 
     // The initial slider enable state depends on the default value of the chorus enable
-    chorus_centredelay_slider->setEnabled(ManfredSynthAudioProcessor::CHORUSENABLE);         
+    chorus_centredelay_slider->setEnabled(ManfredSynthAudioProcessor::CHORUSENABLE);
     chorus_depth_slider->setEnabled(ManfredSynthAudioProcessor::CHORUSENABLE);
     chorus_rate_slider->setEnabled(ManfredSynthAudioProcessor::CHORUSENABLE);
     chorus_mix_slider->setEnabled(ManfredSynthAudioProcessor::CHORUSENABLE);

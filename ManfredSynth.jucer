@@ -6,6 +6,10 @@
               companyName="VSL" pluginManufacturer="VSL">
   <MAINGROUP id="F4ehQ4" name="ManfredSynth">
     <GROUP id="{979C9E4B-1D26-FE9B-64FC-DEF2E3089AEC}" name="Source">
+      <FILE id="hiu0dO" name="SynthVoice.cpp" compile="1" resource="0" file="Source/SynthVoice.cpp"/>
+      <FILE id="mFujsR" name="SynthVoice.h" compile="0" resource="0" file="Source/SynthVoice.h"/>
+      <FILE id="ZTRwMd" name="SynthSound.cpp" compile="1" resource="0" file="Source/SynthSound.cpp"/>
+      <FILE id="f2iY28" name="SynthSound.h" compile="0" resource="0" file="Source/SynthSound.h"/>
       <FILE id="u5CVvK" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="jtgb5X" name="PluginProcessor.h" compile="0" resource="0"
@@ -18,13 +22,60 @@
           file="Source/ManfredSynthGUI.cpp"/>
     <FILE id="j1DNkL" name="ManfredSynthGUI.h" compile="0" resource="0"
           file="Source/ManfredSynthGUI.h"/>
+    <GROUP id="{46173854-6770-F523-3936-515046330B54}" name="Maximilian">
+      <GROUP id="{B4D9A1BF-CE83-65C0-1820-470F7335299F}" name="cpp">
+        <GROUP id="{B9979C0A-9662-4D25-B6D4-062706E51395}" name="commandline">
+          <FILE id="C0fhrB" name="CMakeLists.txt" compile="0" resource="1" file="ext/Maximilian/cpp/commandline/CMakeLists.txt"/>
+          <FILE id="C5z8at" name="crebit2.ogg" compile="0" resource="1" file="ext/Maximilian/cpp/commandline/crebit2.ogg"/>
+          <FILE id="Cnt7wY" name="crebit2.wav" compile="0" resource="1" file="ext/Maximilian/cpp/commandline/crebit2.wav"/>
+          <FILE id="aNm8FD" name="main.cpp" compile="1" resource="0" file="ext/Maximilian/cpp/commandline/main.cpp"/>
+          <FILE id="PcysKW" name="maxi" compile="0" resource="1" file="ext/Maximilian/cpp/commandline/maxi"/>
+          <FILE id="nkgPuy" name="README.txt" compile="0" resource="1" file="ext/Maximilian/cpp/commandline/README.txt"/>
+          <FILE id="RjMzsl" name="stb_vorbis.c" compile="1" resource="0" file="ext/Maximilian/cpp/commandline/stb_vorbis.c"/>
+          <FILE id="iGVEml" name="stb_vorbis.h" compile="0" resource="0" file="ext/Maximilian/cpp/commandline/stb_vorbis.h"/>
+        </GROUP>
+        <FILE id="WxuOCl" name="bigFiles.txt" compile="0" resource="1" file="ext/Maximilian/cpp/bigFiles.txt"/>
+      </GROUP>
+      <GROUP id="{5B15EC86-2274-F965-21EC-24537F80142A}" name="doc">
+        <FILE id="LUuyVz" name="API-docs.md" compile="0" resource="1" file="ext/Maximilian/doc/API-docs.md"/>
+      </GROUP>
+      <GROUP id="{43A68C68-DC77-EDE3-62BE-ED242AEF93FA}" name="src">
+        <GROUP id="{10637512-26F2-4027-BB98-471FFF02B3F1}" name="libs">
+          <FILE id="Dl6fOl" name="fft.cpp" compile="1" resource="0" file="ext/Maximilian/src/libs/fft.cpp"/>
+          <FILE id="SrTawK" name="fft.h" compile="0" resource="0" file="ext/Maximilian/src/libs/fft.h"/>
+          <FILE id="As3z5O" name="maxiAtoms.cpp" compile="1" resource="0" file="ext/Maximilian/src/libs/maxiAtoms.cpp"/>
+          <FILE id="dX7naV" name="maxiAtoms.h" compile="0" resource="0" file="ext/Maximilian/src/libs/maxiAtoms.h"/>
+          <FILE id="gEBbUt" name="maxiBark.cpp" compile="1" resource="0" file="ext/Maximilian/src/libs/maxiBark.cpp"/>
+          <FILE id="KK0YG1" name="maxiBark.h" compile="0" resource="0" file="ext/Maximilian/src/libs/maxiBark.h"/>
+          <FILE id="rSek13" name="maxiFFT.cpp" compile="1" resource="0" file="ext/Maximilian/src/libs/maxiFFT.cpp"/>
+          <FILE id="SpbEEo" name="maxiFFT.h" compile="0" resource="0" file="ext/Maximilian/src/libs/maxiFFT.h"/>
+          <FILE id="zQPnOs" name="maxiGrains.cpp" compile="1" resource="0" file="ext/Maximilian/src/libs/maxiGrains.cpp"/>
+          <FILE id="It7EFl" name="maxiGrains.h" compile="0" resource="0" file="ext/Maximilian/src/libs/maxiGrains.h"/>
+          <FILE id="jxzbrN" name="maxim.h" compile="0" resource="0" file="ext/Maximilian/src/libs/maxim.h"/>
+          <FILE id="E9cQNr" name="maxiMFCC.cpp" compile="1" resource="0" file="ext/Maximilian/src/libs/maxiMFCC.cpp"/>
+          <FILE id="Vz13uJ" name="maxiMFCC.h" compile="0" resource="0" file="ext/Maximilian/src/libs/maxiMFCC.h"/>
+          <FILE id="kgPOlS" name="maxiReverb.cpp" compile="1" resource="0" file="ext/Maximilian/src/libs/maxiReverb.cpp"/>
+          <FILE id="xgQQeQ" name="maxiReverb.h" compile="0" resource="0" file="ext/Maximilian/src/libs/maxiReverb.h"/>
+          <FILE id="vKlPbB" name="maxiSynths.cpp" compile="1" resource="0" file="ext/Maximilian/src/libs/maxiSynths.cpp"/>
+          <FILE id="uJBC2J" name="maxiSynths.h" compile="0" resource="0" file="ext/Maximilian/src/libs/maxiSynths.h"/>
+          <FILE id="RTkfor" name="sineTable.h" compile="0" resource="0" file="ext/Maximilian/src/libs/sineTable.h"/>
+          <FILE id="SHz1ao" name="stb_vorbis.c" compile="1" resource="0" file="ext/Maximilian/src/libs/stb_vorbis.c"/>
+          <FILE id="LegaEs" name="stb_vorbis.h" compile="0" resource="0" file="ext/Maximilian/src/libs/stb_vorbis.h"/>
+        </GROUP>
+        <FILE id="I1YeFY" name="maximilian.cpp" compile="1" resource="0" file="ext/Maximilian/src/maximilian.cpp"/>
+        <FILE id="cqCyE5" name="maximilian.h" compile="1" resource="0" file="ext/Maximilian/src/maximilian.h"/>
+      </GROUP>
+      <FILE id="L0qRCe" name="README.md" compile="0" resource="1" file="ext/Maximilian/README.md"/>
+    </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
     <VS2019 targetFolder="Builds/VisualStudio2019">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="ManfredSynth"/>
-        <CONFIGURATION isDebug="0" name="Release" targetName="ManfredSynth"/>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="ManfredSynth" libraryPath="C:\Users\Manfred Valentan\Audio Development\ManfredSynth\ext\Maximilian&#10;C:\Users\Manfred Valentan\Audio Development\ManfredSynth\ext\Maximilian\src"
+                       headerPath="C:\Users\Manfred Valentan\Audio Development\ManfredSynth\ext\Maximilian\src"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="ManfredSynth" libraryPath="C:\Users\Manfred Valentan\Audio Development\ManfredSynth\ext\Maximilian&#10;C:\Users\Manfred Valentan\Audio Development\ManfredSynth\ext\Maximilian\src"
+                       headerPath="C:\Users\Manfred Valentan\Audio Development\ManfredSynth\ext\Maximilian\src"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="ext\JUCE\modules"/>

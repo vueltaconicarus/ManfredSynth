@@ -24,7 +24,7 @@ void ManfredSynthAudioProcessor::parameterChanged(const juce::String& parameterI
     else if (parameterID == "chorusFeedback")
         chorus.setFeedback(newValue);
     else if (parameterID == "chorusMix")
-        chorus.setMix(newValue);
+        chorus.setMix(newValue);     
 }
 
 
@@ -189,8 +189,6 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
     parameters.addParameterListener("chorusCentreDelay", this);
     parameters.addParameterListener("chorusFeedback", this);
     parameters.addParameterListener("chorusMix", this);
-
-
 }
 
 ManfredSynthAudioProcessor::~ManfredSynthAudioProcessor()
@@ -281,11 +279,15 @@ void ManfredSynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
     synth.setCurrentPlaybackSampleRate(sampleRate);
 
     // MV: define default parameters of the chorus
-    chorus.setCentreDelay(CHORUSCENTREDELAY);
-    chorus.setFeedback(CHORUSFEEDBACK);
-    chorus.setMix(CHORUSMIX);
-    chorus.setRate(CHORUSRATE);
-    chorus.setDepth(CHORUSDEPTH);
+    //chorus.setCentreDelay(CHORUSCENTREDELAY);
+    //chorus.setFeedback(CHORUSFEEDBACK);
+    //chorus.setMix(CHORUSMIX);
+    //chorus.setRate(CHORUSRATE);
+    //chorus.setDepth(CHORUSDEPTH);
+
+    bool b = CHORUSENABLE;
+
+
 }
 
 void ManfredSynthAudioProcessor::releaseResources()
@@ -320,60 +322,7 @@ bool ManfredSynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layo
 
 void ManfredSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    /* MV: we don't need this for the Midi Volume tutorial
-    juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels  = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
-
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
-
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
-    }
-    */
-
     buffer.clear();
-
-    juce::MidiBuffer processedMidi;
-    int time;
-    juce::MidiMessage m;
-
-    for (juce::MidiBuffer::Iterator i(midiMessages); i.getNextEvent(m, time);)
-    {
-        if (m.isNoteOn())
-        {
-            //m = juce::MidiMessage::noteOn(m.getChannel(), m.getNoteNumber(), newVel);
-        }
-        else if (m.isNoteOff())
-        {
-        }
-        else if (m.isAftertouch())
-        {
-        }
-        else if (m.isPitchWheel())
-        {
-        }
-
-        processedMidi.addEvent(m, time);
-    }
-
-    midiMessages.swapWith(processedMidi);
 
     // play synth sound according to MIDI message
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
@@ -406,12 +355,24 @@ void ManfredSynthAudioProcessor::getStateInformation (juce::MemoryBlock& destDat
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    juce::MemoryOutputStream(destData, true).writeBool(*chorusEnableParameter);
+    juce::MemoryOutputStream(destData, true).writeFloat(*chorusRateParameter);
+    juce::MemoryOutputStream(destData, true).writeFloat(*chorusDepthParameter);
+    juce::MemoryOutputStream(destData, true).writeFloat(*chorusCentreDelayParameter);
+    juce::MemoryOutputStream(destData, true).writeFloat(*chorusFeedbackParameter);
+    juce::MemoryOutputStream(destData, true).writeFloat(*chorusMixParameter);
 }
 
 void ManfredSynthAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    *chorusEnableParameter = juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readBool();
+    *chorusRateParameter = juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    *chorusDepthParameter = juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    *chorusCentreDelayParameter = juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    *chorusFeedbackParameter = juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    *chorusMixParameter = juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readFloat();
 }
 
 //==============================================================================

@@ -58,6 +58,14 @@ public:
     juce::dsp::Chorus<float> chorus;    // Chorus effect
     juce::Synthesiser synth;            // built-in synth, to be replaced by a third-party one
     void parameterChanged(const juce::String&, float) override;
+
+    // default values for the chorus
+    static constexpr bool  CHORUSENABLE = false;
+    static constexpr float CHORUSRATE = 5;
+    static constexpr float CHORUSDEPTH = 0.2;
+    static constexpr float CHORUSCENTREDELAY = 10;
+    static constexpr float CHORUSFEEDBACK = 0;
+    static constexpr float CHORUSMIX = 0.5;
     
 private:
     //==============================================================================
@@ -70,6 +78,7 @@ private:
     std::atomic<float>* chorusCentreDelayParameter  = nullptr;
     std::atomic<float>* chorusFeedbackParameter     = nullptr;
     std::atomic<float>* chorusMixParameter          = nullptr;
+
         
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ManfredSynthAudioProcessor)
 };

@@ -9,8 +9,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "ManfredSynthGUI.h"
-#include "SynthSound.h"
-#include "SynthVoice.h"
 
 //bool ManfredSynthAudioProcessor::doChorus = CHORUSENABLE;
 
@@ -74,15 +72,17 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
                                                         CHORUSMIX)              // default value
         })
 {    
-
-    //juce::dsp::Chorus<float> ManfredSynthAudioProcessor::chorus;    // Chorus effect
-
-    synth.addSound(new SineWaveSound());
-    for (int i = 0; i < 6; ++i)
+    // prepare the third-party Maximilian synth
+    // make sure there are no remaining data in the buffer before playing a synth sound
+    mySynth.clearVoices();
+    for (int i = 0; i < 6; ++i) // polyphonic with 6 voices
     {
-        synth.addVoice(new SineWaveVoice());
+        mySynth.addVoice(new SynthVoice());
     }
- 
+    mySynth.clearSounds();
+    mySynth.addSound(new SynthSound());
+
+    // get the raw values out of my APVTS
     chorusEnableParameter       = parameters.getRawParameterValue("chorusEnable");
     chorusRateParameter         = parameters.getRawParameterValue("chorusRate");
     chorusDepthParameter        = parameters.getRawParameterValue("chorusDepth");
@@ -182,19 +182,8 @@ void ManfredSynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
     spec.numChannels = getNumOutputChannels();
     chorus.prepare(spec);
     
-    // MV: prepare dummy JUCE synthesizer
-    synth.setCurrentPlaybackSampleRate(sampleRate);
-
-    // MV: define default parameters of the chorus
-    //chorus.setCentreDelay(CHORUSCENTREDELAY);
-    //chorus.setFeedback(CHORUSFEEDBACK);
-    //chorus.setMix(CHORUSMIX);
-    //chorus.setRate(CHORUSRATE);
-    //chorus.setDepth(CHORUSDEPTH);
-
-    //bool b = CHORUSENABLE;
-
-
+    lastSampleRate = sampleRate; // make sure we use the same sample rate throughout this buffer. Just in case the sample rate should vary suddenly.
+    mySynth.setCurrentPlaybackSampleRate(lastSampleRate);
 }
 
 void ManfredSynthAudioProcessor::releaseResources()
@@ -229,11 +218,11 @@ bool ManfredSynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layo
 
 void ManfredSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    float theWave = Oscillator.sinewave(440);
     buffer.clear();
+    // play Maximilian synth sound according to MIDI message
+    mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
-    // play synth sound according to MIDI message
-    synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    // prepare objects for adding the chorus effect   
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
 

@@ -12,107 +12,30 @@
 
 #include <JuceHeader.h>
 #include "SynthSound.h"
-
-struct SineWaveVoice : public juce::SynthesiserVoice
-{
-    SineWaveVoice() {}
-
-    bool canPlaySound(juce::SynthesiserSound* sound) override
-    {
-        return dynamic_cast<SineWaveSound*> (sound) != nullptr;
-    }
-
-    void startNote(int midiNoteNumber, float velocity,
-        juce::SynthesiserSound*, int /*currentPitchWheelPosition*/) override
-    {
-        currentAngle = 0.0;
-        level = velocity * 0.15;
-        tailOff = 0.0;
-
-        auto cyclesPerSecond = juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber);
-        auto cyclesPerSample = cyclesPerSecond / getSampleRate();
-
-        angleDelta = cyclesPerSample * 2.0 * juce::MathConstants<double>::pi;
-    }
-
-    void stopNote(float /*velocity*/, bool allowTailOff) override
-    {
-        if (allowTailOff)
-        {
-            if (tailOff == 0.0)
-                tailOff = 1.0;
-        }
-        else
-        {
-            clearCurrentNote();
-            angleDelta = 0.0;
-        }
-    }
-
-    void pitchWheelMoved(int) override {}
-    void controllerMoved(int, int) override {}
-
-    void renderNextBlock(juce::AudioSampleBuffer& outputBuffer, int startSample, int numSamples) override
-    {
-        if (angleDelta != 0.0)
-        {
-            if (tailOff > 0.0) // [7]
-            {
-                while (--numSamples >= 0)
-                {
-                    auto currentSample = (float)(std::sin(currentAngle) * level * tailOff);
-
-                    for (auto i = outputBuffer.getNumChannels(); --i >= 0;)
-                        outputBuffer.addSample(i, startSample, currentSample);
-
-                    currentAngle += angleDelta;
-                    ++startSample;
-
-                    tailOff *= 0.99; // [8]
-
-                    if (tailOff <= 0.005)
-                    {
-                        clearCurrentNote(); // [9]
-
-                        angleDelta = 0.0;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                while (--numSamples >= 0) // [6]
-                {
-                    auto currentSample = (float)(std::sin(currentAngle) * level);
-
-                    for (auto i = outputBuffer.getNumChannels(); --i >= 0;)
-                        outputBuffer.addSample(i, startSample, currentSample);
-
-                    currentAngle += angleDelta;
-                    ++startSample;
-                }
-            }
-        }
-    }
-
-private:
-    double currentAngle = 0.0, angleDelta = 0.0, level = 0.0, tailOff = 0.0;
-};
+#include "maximilian.h"
 
 struct SynthVoice : public juce::SynthesiserVoice
 {
     bool canPlaySound(juce::SynthesiserSound* sound) override
     {
-        
+        // check if our derived class is correct: down-cast a base-class object to our derived class. If the cast is unsuccessful, it will return nullptr.
+        return dynamic_cast<SynthSound*> (sound) != nullptr;
     }
 
     void startNote(int midiNoteNumber, float velocity, juce::SynthesiserSound* sound, int currentPitchWheelPosition) override
     {
-
+        env1.trigger = true; // the evnelope starts here
+        level = velocity;
+        frequency = juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber);
     }
 
     void stopNote(float velocity, bool allowTailOff) override
     {
+        env1.trigger = false; // the envelope ends here
+
+        allowTailOff = true;
+
+        if (velocity == 0) clearCurrentNote();
 
     }
 
@@ -129,5 +52,30 @@ struct SynthVoice : public juce::SynthesiserVoice
     void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override
     {
 
+        double theWave;
+        double theSound;
+
+        env1.setAttack(1000);
+        env1.setDecay(2000);
+        env1.setSustain(0.8);
+        env1.setRelease(1000);
+        
+        for (int sample = 0; sample < numSamples; ++sample)
+        {
+            theWave = osc1.saw(frequency);
+            theSound = env1.adsr(theWave, env1.trigger) * level;
+
+            for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)
+            {
+                outputBuffer.addSample(channel, startSample, theSound);
+            }
+            ++startSample;
+        }
     }
+
+private:
+    double level;
+    double frequency;
+    maxiOsc osc1;   // Maximilian oscillator
+    maxiEnv env1;   // Maximilian envelope, to prevent clicks at the start and end of the note
 };

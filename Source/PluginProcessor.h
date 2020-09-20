@@ -10,6 +10,8 @@
 
 #include <JuceHeader.h>
 #include "maximilian.h"
+#include "SynthSound.h"
+#include "SynthVoice.h"
 
 //==============================================================================
 /**
@@ -57,7 +59,8 @@ public:
 
     // MV ===========================================================================
     juce::dsp::Chorus<float> chorus;    // Chorus effect
-    juce::Synthesiser synth;            // built-in synth, to be replaced by a third-party one
+    //juce::Synthesiser synth;            // built-in synth, to be replaced by a third-party one
+    
     void parameterChanged(const juce::String&, float) override;
 
     // default values for the chorus
@@ -67,6 +70,11 @@ public:
     static constexpr float CHORUSCENTREDELAY = 10;
     static constexpr float CHORUSFEEDBACK = 0;
     static constexpr float CHORUSMIX = 0.5;
+
+    // from Maximilian Synth Tutorial
+    juce::Synthesiser mySynth;          // synthesizer using the third-party Maximilian library
+    SynthVoice myVoice;                 // Synth voice using the third-party Maximilian library
+    double lastSampleRate;
     
 private:
     //==============================================================================

@@ -85,6 +85,10 @@ private:
     std::unique_ptr<juce::Slider> chorus_centredelay_slider;
     std::unique_ptr<juce::Slider> chorus_feedback_slider;
     std::unique_ptr<juce::Slider> chorus_mix_slider;
+    std::unique_ptr<juce::Slider> synth_attack_slider;
+    std::unique_ptr<juce::Slider> synth_decay_slider;
+    std::unique_ptr<juce::Slider> synth_sustain_slider;
+    std::unique_ptr<juce::Slider> synth_release_slider;
 
 
     //==============================================================================

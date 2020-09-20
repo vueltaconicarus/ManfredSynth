@@ -36,16 +36,18 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     instrument__comboBox.reset (new juce::ComboBox ("select instrument"));
     addAndMakeVisible (instrument__comboBox.get());
+    instrument__comboBox->setTooltip (TRANS("Select the shape of the synthesised wave"));
     instrument__comboBox->setEditableText (false);
     instrument__comboBox->setJustificationType (juce::Justification::centredLeft);
     instrument__comboBox->setTextWhenNothingSelected (juce::String());
     instrument__comboBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
-    instrument__comboBox->addItem (TRANS("Flute"), 1);
-    instrument__comboBox->addItem (TRANS("Guitar"), 2);
-    instrument__comboBox->addItem (TRANS("Piano"), 3);
+    instrument__comboBox->addItem (TRANS("Sine"), 1);
+    instrument__comboBox->addItem (TRANS("Square"), 2);
+    instrument__comboBox->addItem (TRANS("Saw"), 3);
+    instrument__comboBox->addItem (TRANS("Triangle"), 4);
     instrument__comboBox->addListener (this);
 
-    instrument__comboBox->setBounds (44, 36, 100, 30);
+    instrument__comboBox->setBounds (184, 40, 128, 30);
 
     chorus__toggleButton.reset (new juce::ToggleButton ("Chorus"));
     addAndMakeVisible (chorus__toggleButton.get());
@@ -98,6 +100,42 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     chorus_mix_slider->setBounds (392, 336, 150, 72);
 
+    synth_attack_slider.reset (new juce::Slider ("Synth Attack Slider"));
+    addAndMakeVisible (synth_attack_slider.get());
+    synth_attack_slider->setRange (0, 5000, 1);
+    synth_attack_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
+    synth_attack_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    synth_attack_slider->addListener (this);
+
+    synth_attack_slider->setBounds (176, 72, 150, 72);
+
+    synth_decay_slider.reset (new juce::Slider ("Synth Decay Slider"));
+    addAndMakeVisible (synth_decay_slider.get());
+    synth_decay_slider->setRange (0, 5000, 1);
+    synth_decay_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
+    synth_decay_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    synth_decay_slider->addListener (this);
+
+    synth_decay_slider->setBounds (176, 144, 150, 72);
+
+    synth_sustain_slider.reset (new juce::Slider ("Synth Sustain Slider"));
+    addAndMakeVisible (synth_sustain_slider.get());
+    synth_sustain_slider->setRange (0, 1, 0.01);
+    synth_sustain_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
+    synth_sustain_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    synth_sustain_slider->addListener (this);
+
+    synth_sustain_slider->setBounds (176, 208, 150, 72);
+
+    synth_release_slider.reset (new juce::Slider ("Synth Release Slider"));
+    addAndMakeVisible (synth_release_slider.get());
+    synth_release_slider->setRange (0, 5000, 1);
+    synth_release_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
+    synth_release_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
+    synth_release_slider->addListener (this);
+
+    synth_release_slider->setBounds (176, 272, 150, 72);
+
 
     //[UserPreSize]
     chorusEnableAttachment      .reset(new ButtonAttachment(valueTreeState, "chorusEnable",         *chorus__toggleButton.get()));
@@ -141,6 +179,10 @@ ManfredSynthGUI::~ManfredSynthGUI()
     chorus_centredelay_slider = nullptr;
     chorus_feedback_slider = nullptr;
     chorus_mix_slider = nullptr;
+    synth_attack_slider = nullptr;
+    synth_decay_slider = nullptr;
+    synth_sustain_slider = nullptr;
+    synth_release_slider = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -167,7 +209,7 @@ void ManfredSynthGUI::paint (juce::Graphics& g)
     }
 
     {
-        int x = 396, y = 84, width = 80, height = 26;
+        int x = 396, y = 76, width = 80, height = 26;
         juce::String text (TRANS("Rate (Hz)"));
         juce::Colour fillColour = juce::Colours::azure;
         //[UserPaintCustomArguments] Customize the painting arguments here..
@@ -191,7 +233,7 @@ void ManfredSynthGUI::paint (juce::Graphics& g)
     }
 
     {
-        int x = 396, y = 204, width = 92, height = 26;
+        int x = 396, y = 204, width = 124, height = 26;
         juce::String text (TRANS("Centre Delay (ms)"));
         juce::Colour fillColour = juce::Colours::azure;
         //[UserPaintCustomArguments] Customize the painting arguments here..
@@ -217,6 +259,64 @@ void ManfredSynthGUI::paint (juce::Graphics& g)
     {
         int x = 396, y = 332, width = 92, height = 26;
         juce::String text (TRANS("Mix"));
+        juce::Colour fillColour = juce::Colours::azure;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centredLeft, true);
+    }
+
+    {
+        int x = 164, y = 28, width = 164, height = 404;
+        juce::Colour strokeColour = juce::Colours::green;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (strokeColour);
+        g.drawRect (x, y, width, height, 5);
+
+    }
+
+    {
+        int x = 180, y = 68, width = 124, height = 26;
+        juce::String text (TRANS("Attack (ms)"));
+        juce::Colour fillColour = juce::Colours::azure;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centredLeft, true);
+    }
+
+    {
+        int x = 180, y = 140, width = 124, height = 26;
+        juce::String text (TRANS("Decay (ms)"));
+        juce::Colour fillColour = juce::Colours::azure;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centredLeft, true);
+    }
+
+    {
+        int x = 180, y = 204, width = 124, height = 26;
+        juce::String text (TRANS("Sustain"));
+        juce::Colour fillColour = juce::Colours::azure;
+        //[UserPaintCustomArguments] Customize the painting arguments here..
+        //[/UserPaintCustomArguments]
+        g.setColour (fillColour);
+        g.setFont (juce::Font (15.00f, juce::Font::plain).withTypefaceStyle ("Regular"));
+        g.drawText (text, x, y, width, height,
+                    juce::Justification::centredLeft, true);
+    }
+
+    {
+        int x = 180, y = 268, width = 124, height = 26;
+        juce::String text (TRANS("Release (ms)"));
         juce::Colour fillColour = juce::Colours::azure;
         //[UserPaintCustomArguments] Customize the painting arguments here..
         //[/UserPaintCustomArguments]
@@ -312,6 +412,26 @@ void ManfredSynthGUI::sliderValueChanged (juce::Slider* sliderThatWasMoved)
         //ManfredSynthAudioProcessor::chorus.setMix(sliderThatWasMoved->getValue());
         //[/UserSliderCode_chorus_mix_slider]
     }
+    else if (sliderThatWasMoved == synth_attack_slider.get())
+    {
+        //[UserSliderCode_synth_attack_slider] -- add your slider handling code here..
+        //[/UserSliderCode_synth_attack_slider]
+    }
+    else if (sliderThatWasMoved == synth_decay_slider.get())
+    {
+        //[UserSliderCode_synth_decay_slider] -- add your slider handling code here..
+        //[/UserSliderCode_synth_decay_slider]
+    }
+    else if (sliderThatWasMoved == synth_sustain_slider.get())
+    {
+        //[UserSliderCode_synth_sustain_slider] -- add your slider handling code here..
+        //[/UserSliderCode_synth_sustain_slider]
+    }
+    else if (sliderThatWasMoved == synth_release_slider.get())
+    {
+        //[UserSliderCode_synth_release_slider] -- add your slider handling code here..
+        //[/UserSliderCode_synth_release_slider]
+    }
 
     //[UsersliderValueChanged_Post]
     //[/UsersliderValueChanged_Post]
@@ -340,13 +460,13 @@ BEGIN_JUCER_METADATA
   <BACKGROUND backgroundColour="ff323e44">
     <RECT pos="380 28 164 404" fill="solid: 8a2aa5" hasStroke="1" stroke="5, mitered, butt"
           strokeColour="solid: ff008000"/>
-    <TEXT pos="396 84 80 26" fill="solid: fff0ffff" hasStroke="0" text="Rate (Hz)"
+    <TEXT pos="396 76 80 26" fill="solid: fff0ffff" hasStroke="0" text="Rate (Hz)"
           fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
           italic="0" justification="33"/>
     <TEXT pos="396 140 92 26" fill="solid: fff0ffff" hasStroke="0" text="Depth"
           fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
           italic="0" justification="33"/>
-    <TEXT pos="396 204 92 26" fill="solid: fff0ffff" hasStroke="0" text="Centre Delay (ms)"
+    <TEXT pos="396 204 124 26" fill="solid: fff0ffff" hasStroke="0" text="Centre Delay (ms)"
           fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
           italic="0" justification="33"/>
     <TEXT pos="396 268 92 26" fill="solid: fff0ffff" hasStroke="0" text="Feedback"
@@ -355,11 +475,25 @@ BEGIN_JUCER_METADATA
     <TEXT pos="396 332 92 26" fill="solid: fff0ffff" hasStroke="0" text="Mix"
           fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
           italic="0" justification="33"/>
+    <RECT pos="164 28 164 404" fill="solid: 8a2aa5" hasStroke="1" stroke="5, mitered, butt"
+          strokeColour="solid: ff008000"/>
+    <TEXT pos="180 68 124 26" fill="solid: fff0ffff" hasStroke="0" text="Attack (ms)"
+          fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
+          italic="0" justification="33"/>
+    <TEXT pos="180 140 124 26" fill="solid: fff0ffff" hasStroke="0" text="Decay (ms)"
+          fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
+          italic="0" justification="33"/>
+    <TEXT pos="180 204 124 26" fill="solid: fff0ffff" hasStroke="0" text="Sustain"
+          fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
+          italic="0" justification="33"/>
+    <TEXT pos="180 268 124 26" fill="solid: fff0ffff" hasStroke="0" text="Release (ms)"
+          fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
+          italic="0" justification="33"/>
   </BACKGROUND>
   <COMBOBOX name="select instrument" id="5688c51200c22d75" memberName="instrument__comboBox"
-            virtualName="" explicitFocusOrder="0" pos="44 36 100 30" editable="0"
-            layout="33" items="Flute&#10;Guitar&#10;Piano" textWhenNonSelected=""
-            textWhenNoItems="(no choices)"/>
+            virtualName="" explicitFocusOrder="0" pos="184 40 128 30" tooltip="Select the shape of the synthesised wave"
+            editable="0" layout="33" items="Sine&#10;Square&#10;Saw&#10;Triangle"
+            textWhenNonSelected="" textWhenNoItems="(no choices)"/>
   <TOGGLEBUTTON name="Chorus" id="a22b8495be480f90" memberName="chorus__toggleButton"
                 virtualName="" explicitFocusOrder="0" pos="416 40 100 24" buttonText="Chorus"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
@@ -386,6 +520,26 @@ BEGIN_JUCER_METADATA
   <SLIDER name="Chorus Mix Slider" id="28a4bd3fd08aa70f" memberName="chorus_mix_slider"
           virtualName="" explicitFocusOrder="0" pos="392 336 150 72" min="0.0"
           max="1.0" int="0.01" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
+  <SLIDER name="Synth Attack Slider" id="97504f2e2e903938" memberName="synth_attack_slider"
+          virtualName="" explicitFocusOrder="0" pos="176 72 150 72" min="0.0"
+          max="5000.0" int="1.0" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
+  <SLIDER name="Synth Decay Slider" id="59c7705e4afed57e" memberName="synth_decay_slider"
+          virtualName="" explicitFocusOrder="0" pos="176 144 150 72" min="0.0"
+          max="5000.0" int="1.0" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
+  <SLIDER name="Synth Sustain Slider" id="6161b91906697245" memberName="synth_sustain_slider"
+          virtualName="" explicitFocusOrder="0" pos="176 208 150 72" min="0.0"
+          max="1.0" int="0.01" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
+  <SLIDER name="Synth Release Slider" id="552daeba4ca0b6bc" memberName="synth_release_slider"
+          virtualName="" explicitFocusOrder="0" pos="176 272 150 72" min="0.0"
+          max="5000.0" int="1.0" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
 </JUCER_COMPONENT>

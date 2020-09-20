@@ -70,6 +70,10 @@ public:
     static constexpr float CHORUSCENTREDELAY = 10;
     static constexpr float CHORUSFEEDBACK = 0;
     static constexpr float CHORUSMIX = 0.5;
+    static constexpr float SYNTHATTACK = 500;
+    static constexpr float SYNTHDECAY = 500;
+    static constexpr float SYNTHSUSTAIN = 0.8;
+    static constexpr float SYNTHRELEASE = 1000;
 
     // from Maximilian Synth Tutorial
     juce::Synthesiser mySynth;          // synthesizer using the third-party Maximilian library
@@ -87,9 +91,14 @@ private:
     std::atomic<float>* chorusCentreDelayParameter  = nullptr;
     std::atomic<float>* chorusFeedbackParameter     = nullptr;
     std::atomic<float>* chorusMixParameter          = nullptr;
+    std::atomic<float>* synthAttackParameter        = nullptr;
+    std::atomic<float>* synthDecayParameter         = nullptr;
+    std::atomic<float>* synthSustainParameter       = nullptr;
+    std::atomic<float>* synthReleaseParameter       = nullptr;
+    //std::atomic<float>* synthWaveParameter          = nullptr;
 
     // Maximilian
-    maxiOsc Oscillator;
+    //maxiOsc Oscillator;
 
         
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ManfredSynthAudioProcessor)

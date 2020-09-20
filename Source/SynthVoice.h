@@ -62,7 +62,7 @@ struct SynthVoice : public juce::SynthesiserVoice
         
         for (int sample = 0; sample < numSamples; ++sample)
         {
-            theWave = osc1.saw(frequency);
+            theWave = osc1.sinewave(frequency);
             theSound = env1.adsr(theWave, env1.trigger) * level;
 
             for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)
@@ -76,6 +76,7 @@ struct SynthVoice : public juce::SynthesiserVoice
 private:
     double level;
     double frequency;
+public:
     maxiOsc osc1;   // Maximilian oscillator
     maxiEnv env1;   // Maximilian envelope, to prevent clicks at the start and end of the note
 };

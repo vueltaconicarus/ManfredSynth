@@ -34,20 +34,20 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
-    instrument__comboBox.reset (new juce::ComboBox ("select instrument"));
-    addAndMakeVisible (instrument__comboBox.get());
-    instrument__comboBox->setTooltip (TRANS("Select the shape of the synthesised wave"));
-    instrument__comboBox->setEditableText (false);
-    instrument__comboBox->setJustificationType (juce::Justification::centredLeft);
-    instrument__comboBox->setTextWhenNothingSelected (juce::String());
-    instrument__comboBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
-    instrument__comboBox->addItem (TRANS("Sine"), 1);
-    instrument__comboBox->addItem (TRANS("Square"), 2);
-    instrument__comboBox->addItem (TRANS("Saw"), 3);
-    instrument__comboBox->addItem (TRANS("Triangle"), 4);
-    instrument__comboBox->addListener (this);
+    synth_wave_comboBox.reset (new juce::ComboBox ("Synth Waveform"));
+    addAndMakeVisible (synth_wave_comboBox.get());
+    synth_wave_comboBox->setTooltip (TRANS("Select the waveform of the synthesised wave"));
+    synth_wave_comboBox->setEditableText (false);
+    synth_wave_comboBox->setJustificationType (juce::Justification::centredLeft);
+    synth_wave_comboBox->setTextWhenNothingSelected (juce::String());
+    synth_wave_comboBox->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    synth_wave_comboBox->addItem (TRANS("Sine"), 1);
+    synth_wave_comboBox->addItem (TRANS("Square"), 2);
+    synth_wave_comboBox->addItem (TRANS("Saw"), 3);
+    synth_wave_comboBox->addItem (TRANS("Triangle"), 4);
+    synth_wave_comboBox->addListener (this);
 
-    instrument__comboBox->setBounds (184, 40, 128, 30);
+    synth_wave_comboBox->setBounds (184, 40, 128, 30);
 
     chorus__toggleButton.reset (new juce::ToggleButton ("Chorus"));
     addAndMakeVisible (chorus__toggleButton.get());
@@ -144,6 +144,11 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
     chorusCentreDelayAttachment .reset(new SliderAttachment(valueTreeState, "chorusCentreDelay",    *chorus_centredelay_slider.get()));
     chorusFeedbackAttachment    .reset(new SliderAttachment(valueTreeState, "chorusFeedback",       *chorus_feedback_slider.get()));
     chorusMixAttachment         .reset(new SliderAttachment(valueTreeState, "chorusMix",            *chorus_mix_slider.get()));
+    synthAttackAttachment       .reset(new SliderAttachment(valueTreeState, "synthAttack",          *synth_attack_slider.get()));
+    synthDecayAttachment        .reset(new SliderAttachment(valueTreeState, "synthDecay",           *synth_decay_slider.get()));
+    synthSustainAttachment      .reset(new SliderAttachment(valueTreeState, "synthSustain",         *synth_sustain_slider.get()));
+    synthReleaseAttachment      .reset(new SliderAttachment(valueTreeState, "synthRelease",         *synth_attack_slider.get()));
+    //synthWaveAttachment         .reset(new ComboBoxAttachment(valueTreeState, "synthWave",          *synth_wave_comboBox.get()));
     //[/UserPreSize]
 
     setSize (600, 400);
@@ -170,9 +175,14 @@ ManfredSynthGUI::~ManfredSynthGUI()
     chorusCentreDelayAttachment = nullptr;
     chorusFeedbackAttachment    = nullptr;
     chorusMixAttachment         = nullptr;
+    synthAttackAttachment       = nullptr;
+    synthDecayAttachment        = nullptr;
+    synthSustainAttachment      = nullptr;
+    synthReleaseAttachment      = nullptr;
+    //synthWaveAttachment         = nullptr;
     //[/Destructor_pre]
 
-    instrument__comboBox = nullptr;
+    synth_wave_comboBox = nullptr;
     chorus__toggleButton = nullptr;
     chorus_rate_slider = nullptr;
     chorus_depth_slider = nullptr;
@@ -344,10 +354,10 @@ void ManfredSynthGUI::comboBoxChanged (juce::ComboBox* comboBoxThatHasChanged)
     //[UsercomboBoxChanged_Pre]
     //[/UsercomboBoxChanged_Pre]
 
-    if (comboBoxThatHasChanged == instrument__comboBox.get())
+    if (comboBoxThatHasChanged == synth_wave_comboBox.get())
     {
-        //[UserComboBoxCode_instrument__comboBox] -- add your combo box handling code here..
-        //[/UserComboBoxCode_instrument__comboBox]
+        //[UserComboBoxCode_synth_wave_comboBox] -- add your combo box handling code here..
+        //[/UserComboBoxCode_synth_wave_comboBox]
     }
 
     //[UsercomboBoxChanged_Post]
@@ -490,8 +500,8 @@ BEGIN_JUCER_METADATA
           fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
           italic="0" justification="33"/>
   </BACKGROUND>
-  <COMBOBOX name="select instrument" id="5688c51200c22d75" memberName="instrument__comboBox"
-            virtualName="" explicitFocusOrder="0" pos="184 40 128 30" tooltip="Select the shape of the synthesised wave"
+  <COMBOBOX name="Synth Waveform" id="5688c51200c22d75" memberName="synth_wave_comboBox"
+            virtualName="" explicitFocusOrder="0" pos="184 40 128 30" tooltip="Select the waveform of the synthesised wave"
             editable="0" layout="33" items="Sine&#10;Square&#10;Saw&#10;Triangle"
             textWhenNonSelected="" textWhenNoItems="(no choices)"/>
   <TOGGLEBUTTON name="Chorus" id="a22b8495be480f90" memberName="chorus__toggleButton"

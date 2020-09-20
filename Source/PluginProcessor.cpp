@@ -16,14 +16,22 @@ void ManfredSynthAudioProcessor::parameterChanged(const juce::String& parameterI
 {
     if (parameterID == "chorusRate")
         chorus.setRate(newValue);
-    else if(parameterID == "chorusDepth")
+    else if (parameterID == "chorusDepth")
         chorus.setDepth(newValue);
     else if (parameterID == "chorusCentreDelay")
         chorus.setCentreDelay(newValue);
     else if (parameterID == "chorusFeedback")
         chorus.setFeedback(newValue);
     else if (parameterID == "chorusMix")
-        chorus.setMix(newValue);     
+        chorus.setMix(newValue);
+    else if (parameterID == "synthAttack")
+        myVoice.env1.setAttack(newValue);
+    else if (parameterID == "synthDecay")
+        myVoice.env1.setDecay(newValue);
+    else if (parameterID == "synthSustain")
+        myVoice.env1.setSustain(newValue);
+    else if (parameterID == "synthRelease")
+        myVoice.env1.setRelease(newValue);
 }
 
 
@@ -69,9 +77,35 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
                                                         "Chorus Mix",     // parameter name
                                                         0.0f,               // minimum
                                                         1.0f,             //maximum
-                                                        CHORUSMIX)              // default value
+                                                        CHORUSMIX),              // default value
+            std::make_unique<juce::AudioParameterFloat>("synthAttack",      // parameterID
+                                                        "Synth Attack",     // parameter name
+                                                        0.0f,               // minimum
+                                                        5000.0f,             //maximum
+                                                        SYNTHATTACK),              // default value
+            std::make_unique<juce::AudioParameterFloat>("synthDecay",      // parameterID
+                                                        "Synth Decay",     // parameter name
+                                                        0.0f,               // minimum
+                                                        5000.0f,             //maximum
+                                                        SYNTHDECAY),              // default value
+            std::make_unique<juce::AudioParameterFloat>("synthSustain",      // parameterID
+                                                        "Synth Sustain",     // parameter name
+                                                        0.0f,               // minimum
+                                                        1.0f,             //maximum
+                                                        SYNTHSUSTAIN),              // default value
+            std::make_unique<juce::AudioParameterFloat>("synthRelease",      // parameterID
+                                                        "Synth Release",     // parameter name
+                                                        0.0f,               // minimum
+                                                        5000.0f,             //maximum
+                                                        SYNTHRELEASE)              // default value
         })
 {    
+
+    //std::make_unique<juce::AudioParameterChoice>("synthWave",
+    //    "Synth Waveform",
+    //    const juce::StringArray & ("Sine", "Square", "Saw", "Triangle"),
+    //    "Sine")
+
     // prepare the third-party Maximilian synth
     // make sure there are no remaining data in the buffer before playing a synth sound
     mySynth.clearVoices();
@@ -89,6 +123,11 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
     chorusCentreDelayParameter  = parameters.getRawParameterValue("chorusCentreDelay");
     chorusFeedbackParameter     = parameters.getRawParameterValue("chorusFeedback");
     chorusMixParameter          = parameters.getRawParameterValue("chorusMix");
+    synthAttackParameter        = parameters.getRawParameterValue("synthAttack");
+    synthDecayParameter         = parameters.getRawParameterValue("synthDecay");
+    synthSustainParameter       = parameters.getRawParameterValue("synthSustain");
+    synthReleaseParameter       = parameters.getRawParameterValue("synthRelease");
+    //synthWaveParameter          = parameters.getRawParameterValue("synthWave");
 
     // MV: add listeners
     parameters.addParameterListener("chorusRate", this);
@@ -96,6 +135,11 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
     parameters.addParameterListener("chorusCentreDelay", this);
     parameters.addParameterListener("chorusFeedback", this);
     parameters.addParameterListener("chorusMix", this);
+    parameters.addParameterListener("synthAttack", this);
+    parameters.addParameterListener("synthRelease", this);
+    parameters.addParameterListener("synthSustain", this);
+    parameters.addParameterListener("synthRelease", this);
+    //parameters.addParameterListener("synthWave", this);
 }
 
 ManfredSynthAudioProcessor::~ManfredSynthAudioProcessor()
@@ -105,6 +149,11 @@ ManfredSynthAudioProcessor::~ManfredSynthAudioProcessor()
     parameters.removeParameterListener("chorusCentreDelay", this);
     parameters.removeParameterListener("chorusFeedback", this);
     parameters.removeParameterListener("chorusMix", this);
+    parameters.removeParameterListener("synthAttack", this);
+    parameters.removeParameterListener("synthRelease", this);
+    parameters.removeParameterListener("synthSustain", this);
+    parameters.removeParameterListener("synthRelease", this);
+    //parameters.removeParameterListener("synthWave", this);
 }
 
 //==============================================================================
@@ -184,6 +233,13 @@ void ManfredSynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
     
     lastSampleRate = sampleRate; // make sure we use the same sample rate throughout this buffer. Just in case the sample rate should vary suddenly.
     mySynth.setCurrentPlaybackSampleRate(lastSampleRate);
+
+    // MV prepare the synth
+    myVoice.env1.setAttack(SYNTHATTACK);
+    myVoice.env1.setDecay(SYNTHDECAY);
+    myVoice.env1.setSustain(SYNTHSUSTAIN);
+    myVoice.env1.setRelease(SYNTHRELEASE);
+
 }
 
 void ManfredSynthAudioProcessor::releaseResources()

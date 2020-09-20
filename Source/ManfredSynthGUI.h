@@ -63,6 +63,7 @@ private:
     // Shortcuts for long commands
     typedef juce::AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
     typedef juce::AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
+    typedef juce::AudioProcessorValueTreeState::ComboBoxAttachment ComboBoxAttachment;
 
     // this holds the APVTS which originated in the processor, and came here via the editor
     juce::AudioProcessorValueTreeState& valueTreeState;
@@ -74,11 +75,15 @@ private:
     std::unique_ptr<SliderAttachment> chorusCentreDelayAttachment;
     std::unique_ptr<SliderAttachment> chorusFeedbackAttachment;
     std::unique_ptr<SliderAttachment> chorusMixAttachment;
-
+    std::unique_ptr<SliderAttachment> synthAttackAttachment;
+    std::unique_ptr<SliderAttachment> synthDecayAttachment;
+    std::unique_ptr<SliderAttachment> synthSustainAttachment;
+    std::unique_ptr<SliderAttachment> synthReleaseAttachment;
+    //std::unique_ptr<ComboBoxAttachment> synthWaveAttachment;
     //[/UserVariables]
 
     //==============================================================================
-    std::unique_ptr<juce::ComboBox> instrument__comboBox;
+    std::unique_ptr<juce::ComboBox> synth_wave_comboBox;
     std::unique_ptr<juce::ToggleButton> chorus__toggleButton;
     std::unique_ptr<juce::Slider> chorus_rate_slider;
     std::unique_ptr<juce::Slider> chorus_depth_slider;

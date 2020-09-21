@@ -26,6 +26,7 @@ public:
 
     void paint (juce::Graphics&) override;
     void resized() override;
+    juce::SharedResourcePointer<juce::TooltipWindow> tooltipWindow;
 
 private:
 

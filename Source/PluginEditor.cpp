@@ -19,6 +19,8 @@ ManfredSynthAudioProcessorEditor::ManfredSynthAudioProcessorEditor (ManfredSynth
 
     // MV: display gui elements
     addAndMakeVisible(&gui);
+
+    //juce::TooltipWindow tooltipWindow{ this }; // instance required for ToolTips to work
   }
 
 ManfredSynthAudioProcessorEditor::~ManfredSynthAudioProcessorEditor()

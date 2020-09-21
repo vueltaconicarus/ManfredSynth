@@ -51,12 +51,14 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     chorus__toggleButton.reset (new juce::ToggleButton ("Chorus"));
     addAndMakeVisible (chorus__toggleButton.get());
+    chorus__toggleButton->setTooltip (TRANS("Enable or disable the Chorus effect"));
     chorus__toggleButton->addListener (this);
 
     chorus__toggleButton->setBounds (416, 40, 100, 24);
 
     chorus_rate_slider.reset (new juce::Slider ("Chorus Rate Slider"));
     addAndMakeVisible (chorus_rate_slider.get());
+    chorus_rate_slider->setTooltip (TRANS("Frequency of the added signal"));
     chorus_rate_slider->setRange (0, 99, 0.1);
     chorus_rate_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
     chorus_rate_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
@@ -66,6 +68,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     chorus_depth_slider.reset (new juce::Slider ("Chorus Depth Slider"));
     addAndMakeVisible (chorus_depth_slider.get());
+    chorus_depth_slider->setTooltip (TRANS("Amplitude of the added signal"));
     chorus_depth_slider->setRange (0, 1, 0.01);
     chorus_depth_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
     chorus_depth_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
@@ -75,6 +78,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     chorus_centredelay_slider.reset (new juce::Slider ("Chorus CentreDelay Slider"));
     addAndMakeVisible (chorus_centredelay_slider.get());
+    chorus_centredelay_slider->setTooltip (TRANS("Initial delay of the added signal"));
     chorus_centredelay_slider->setRange (0, 99, 0.1);
     chorus_centredelay_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
     chorus_centredelay_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
@@ -84,6 +88,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     chorus_feedback_slider.reset (new juce::Slider ("Chorus Feedback Slider"));
     addAndMakeVisible (chorus_feedback_slider.get());
+    chorus_feedback_slider->setTooltip (TRANS("I honestly have not yet understood what this does..."));
     chorus_feedback_slider->setRange (-1, 1, 0.01);
     chorus_feedback_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
     chorus_feedback_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
@@ -93,6 +98,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     chorus_mix_slider.reset (new juce::Slider ("Chorus Mix Slider"));
     addAndMakeVisible (chorus_mix_slider.get());
+    chorus_mix_slider->setTooltip (TRANS("Ratio of original and chorus signals: 0 (dry) plays only the original signal, 1 (wet) plays only the chorus signal."));
     chorus_mix_slider->setRange (0, 1, 0.01);
     chorus_mix_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
     chorus_mix_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
@@ -102,6 +108,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     synth_attack_slider.reset (new juce::Slider ("Synth Attack Slider"));
     addAndMakeVisible (synth_attack_slider.get());
+    synth_attack_slider->setTooltip (TRANS("Time in ms until the maximum of the pulse is reached"));
     synth_attack_slider->setRange (0, 5000, 1);
     synth_attack_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
     synth_attack_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
@@ -111,6 +118,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     synth_decay_slider.reset (new juce::Slider ("Synth Decay Slider"));
     addAndMakeVisible (synth_decay_slider.get());
+    synth_decay_slider->setTooltip (TRANS("Time in ms after the pulse maximum, until a plateau is reached."));
     synth_decay_slider->setRange (0, 5000, 1);
     synth_decay_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
     synth_decay_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
@@ -120,6 +128,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     synth_sustain_slider.reset (new juce::Slider ("Synth Sustain Slider"));
     addAndMakeVisible (synth_sustain_slider.get());
+    synth_sustain_slider->setTooltip (TRANS("Plateau height as fraction of the pulse maximum."));
     synth_sustain_slider->setRange (0, 1, 0.01);
     synth_sustain_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
     synth_sustain_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
@@ -129,6 +138,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
 
     synth_release_slider.reset (new juce::Slider ("Synth Release Slider"));
     addAndMakeVisible (synth_release_slider.get());
+    synth_release_slider->setTooltip (TRANS("Time in ms for the pulse to reach 0 after the key has been released."));
     synth_release_slider->setRange (0, 5000, 1);
     synth_release_slider->setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
     synth_release_slider->setTextBoxStyle (juce::Slider::TextBoxLeft, false, 80, 20);
@@ -505,53 +515,54 @@ BEGIN_JUCER_METADATA
             editable="0" layout="33" items="Sine&#10;Square&#10;Saw&#10;Triangle"
             textWhenNonSelected="" textWhenNoItems="(no choices)"/>
   <TOGGLEBUTTON name="Chorus" id="a22b8495be480f90" memberName="chorus__toggleButton"
-                virtualName="" explicitFocusOrder="0" pos="416 40 100 24" buttonText="Chorus"
-                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
+                virtualName="" explicitFocusOrder="0" pos="416 40 100 24" tooltip="Enable or disable the Chorus effect"
+                buttonText="Chorus" connectedEdges="0" needsCallback="1" radioGroupId="0"
+                state="0"/>
   <SLIDER name="Chorus Rate Slider" id="9d4288d814062297" memberName="chorus_rate_slider"
-          virtualName="" explicitFocusOrder="0" pos="392 80 150 72" min="0.0"
-          max="99.0" int="0.1" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
-          needsCallback="1"/>
+          virtualName="" explicitFocusOrder="0" pos="392 80 150 72" tooltip="Frequency of the added signal"
+          min="0.0" max="99.0" int="0.1" style="RotaryHorizontalVerticalDrag"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="Chorus Depth Slider" id="d172cd517d235994" memberName="chorus_depth_slider"
-          virtualName="" explicitFocusOrder="0" pos="392 144 150 72" min="0.0"
-          max="1.0" int="0.01" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
-          needsCallback="1"/>
+          virtualName="" explicitFocusOrder="0" pos="392 144 150 72" tooltip="Amplitude of the added signal"
+          min="0.0" max="1.0" int="0.01" style="RotaryHorizontalVerticalDrag"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="Chorus CentreDelay Slider" id="7e09c0474e28e150" memberName="chorus_centredelay_slider"
-          virtualName="" explicitFocusOrder="0" pos="392 208 150 72" min="0.0"
-          max="99.0" int="0.1" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
-          needsCallback="1"/>
+          virtualName="" explicitFocusOrder="0" pos="392 208 150 72" tooltip="Initial delay of the added signal"
+          min="0.0" max="99.0" int="0.1" style="RotaryHorizontalVerticalDrag"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="Chorus Feedback Slider" id="c8f3fac5cde63f07" memberName="chorus_feedback_slider"
-          virtualName="" explicitFocusOrder="0" pos="392 272 150 72" min="-1.0"
-          max="1.0" int="0.01" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
-          needsCallback="1"/>
+          virtualName="" explicitFocusOrder="0" pos="392 272 150 72" tooltip="I honestly have not yet understood what this does..."
+          min="-1.0" max="1.0" int="0.01" style="RotaryHorizontalVerticalDrag"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="Chorus Mix Slider" id="28a4bd3fd08aa70f" memberName="chorus_mix_slider"
-          virtualName="" explicitFocusOrder="0" pos="392 336 150 72" min="0.0"
-          max="1.0" int="0.01" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
-          needsCallback="1"/>
+          virtualName="" explicitFocusOrder="0" pos="392 336 150 72" tooltip="Ratio of original and chorus signals: 0 (dry) plays only the original signal, 1 (wet) plays only the chorus signal."
+          min="0.0" max="1.0" int="0.01" style="RotaryHorizontalVerticalDrag"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="Synth Attack Slider" id="97504f2e2e903938" memberName="synth_attack_slider"
-          virtualName="" explicitFocusOrder="0" pos="176 72 150 72" min="0.0"
-          max="5000.0" int="1.0" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
-          needsCallback="1"/>
+          virtualName="" explicitFocusOrder="0" pos="176 72 150 72" tooltip="Time in ms until the maximum of the pulse is reached"
+          min="0.0" max="5000.0" int="1.0" style="RotaryHorizontalVerticalDrag"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="Synth Decay Slider" id="59c7705e4afed57e" memberName="synth_decay_slider"
-          virtualName="" explicitFocusOrder="0" pos="176 144 150 72" min="0.0"
-          max="5000.0" int="1.0" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
-          needsCallback="1"/>
+          virtualName="" explicitFocusOrder="0" pos="176 144 150 72" tooltip="Time in ms after the pulse maximum, until a plateau is reached."
+          min="0.0" max="5000.0" int="1.0" style="RotaryHorizontalVerticalDrag"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="Synth Sustain Slider" id="6161b91906697245" memberName="synth_sustain_slider"
-          virtualName="" explicitFocusOrder="0" pos="176 208 150 72" min="0.0"
-          max="1.0" int="0.01" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
-          needsCallback="1"/>
+          virtualName="" explicitFocusOrder="0" pos="176 208 150 72" tooltip="Plateau height as fraction of the pulse maximum."
+          min="0.0" max="1.0" int="0.01" style="RotaryHorizontalVerticalDrag"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="Synth Release Slider" id="552daeba4ca0b6bc" memberName="synth_release_slider"
-          virtualName="" explicitFocusOrder="0" pos="176 272 150 72" min="0.0"
-          max="5000.0" int="1.0" style="RotaryHorizontalVerticalDrag" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
-          needsCallback="1"/>
+          virtualName="" explicitFocusOrder="0" pos="176 272 150 72" tooltip="Time in ms for the pulse to reach 0 after the key has been released."
+          min="0.0" max="5000.0" int="1.0" style="RotaryHorizontalVerticalDrag"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

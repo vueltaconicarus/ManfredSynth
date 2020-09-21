@@ -63,7 +63,7 @@ public:
     void parameterChanged(const juce::String&, float) override;
 
     // default values for the chorus
-    static constexpr bool  CHORUSENABLE = false;
+    static constexpr float CHORUSENABLE = 0;
     static constexpr float CHORUSRATE = 5;
     static constexpr float CHORUSDEPTH = 0.2;
     static constexpr float CHORUSCENTREDELAY = 10;

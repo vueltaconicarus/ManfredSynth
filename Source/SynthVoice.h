@@ -22,12 +22,29 @@ struct SynthVoice : public juce::SynthesiserVoice
         return dynamic_cast<SynthSound*> (sound) != nullptr;
     }
 
-    void getParam(float* attackPtr, float* decayPtr, float* sustainPtr, float* releasePtr)
+    void setEnvelopeParameters(float* attackPtr, float* decayPtr, float* sustainPtr, float* releasePtr)
     {
         env1.setAttack(*attackPtr);
         env1.setDecay(*decayPtr);
         env1.setSustain(*sustainPtr);
         env1.setRelease(*releasePtr);
+    }
+
+    void setOscType(float* selection)
+    {
+        theWave = *selection;
+    }
+
+    double oscType()
+    {
+        switch (theWave)
+        {
+        case 0: return osc1.sinewave(frequency);
+        case 1: return osc1.square(frequency);
+        case 2: return osc1.saw(frequency);
+        case 3: return osc1.triangle(frequency);
+        default: return osc1.sinewave(frequency);
+        }
     }
 
     void startNote(int midiNoteNumber, float velocity, juce::SynthesiserSound* sound, int currentPitchWheelPosition) override
@@ -65,8 +82,8 @@ struct SynthVoice : public juce::SynthesiserVoice
 
         for (int sample = 0; sample < numSamples; ++sample)
         {
-            theWave = osc1.sinewave(frequency);
-            theSound = env1.adsr(theWave, env1.trigger) * level;
+            //theWave = osc1.sinewave(frequency);
+            theSound = env1.adsr(oscType(), env1.trigger) * level;
 
             for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)
             {
@@ -81,4 +98,5 @@ private:
     double frequency;
     maxiOsc osc1;   // Maximilian oscillator
     maxiEnv env1;   // Maximilian envelope, to prevent clicks at the start and end of the note
+    int theWave;
 };

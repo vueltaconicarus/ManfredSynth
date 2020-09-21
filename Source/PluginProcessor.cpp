@@ -115,7 +115,7 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
     synthDecayParameter         = parameters.getRawParameterValue("synthDecay");
     synthSustainParameter       = parameters.getRawParameterValue("synthSustain");
     synthReleaseParameter       = parameters.getRawParameterValue("synthRelease");
-    //synthWaveParameter          = parameters.getRawParameterValue("synthWave");
+    synthWaveParameter          = parameters.getRawParameterValue("synthWave");
 
     // MV: add listeners
     parameters.addParameterListener("chorusRate", this);
@@ -259,10 +259,15 @@ void ManfredSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     for (int i = 0; i < mySynth.getNumVoices(); ++i)
     {
         if ((myVoice = dynamic_cast<SynthVoice*>(mySynth.getVoice(i))))
-                myVoice->getParam((float*)synthAttackParameter,
-                    (float*)synthDecayParameter, 
-                    (float*)synthSustainParameter, 
-                    (float*)synthReleaseParameter);
+        {
+            myVoice->setEnvelopeParameters((float*)synthAttackParameter,
+                (float*)synthDecayParameter,
+                (float*)synthSustainParameter,
+                (float*)synthReleaseParameter);
+
+            myVoice->setOscType((float*)synthWaveParameter);
+        }
+
     }
 
     buffer.clear();

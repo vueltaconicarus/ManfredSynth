@@ -24,8 +24,6 @@ struct SynthVoice : public juce::SynthesiserVoice
 
     void getParam(float* attackPtr, float* decayPtr, float* sustainPtr, float* releasePtr)
     {
-        //env1.setAttack(double(*attack));
-        //attack = *attackPtr;
         env1.setAttack(*attackPtr);
         env1.setDecay(*decayPtr);
         env1.setSustain(*sustainPtr);
@@ -65,11 +63,6 @@ struct SynthVoice : public juce::SynthesiserVoice
         double theWave;
         double theSound;
 
-        //env1.setAttack(attack);
-        //env1.setDecay(decay);
-        //env1.setSustain(sustain);
-        //env1.setRelease(release);
-        
         for (int sample = 0; sample < numSamples; ++sample)
         {
             theWave = osc1.sinewave(frequency);
@@ -86,11 +79,6 @@ struct SynthVoice : public juce::SynthesiserVoice
 private:
     double level;
     double frequency;
-    float attack = 0.1;
-    float decay = 0.1;
-    float sustain = 1;
-    float release = 0.1;
-public:
     maxiOsc osc1;   // Maximilian oscillator
     maxiEnv env1;   // Maximilian envelope, to prevent clicks at the start and end of the note
 };

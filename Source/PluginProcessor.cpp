@@ -24,23 +24,6 @@ void ManfredSynthAudioProcessor::parameterChanged(const juce::String& parameterI
         chorus.setFeedback(newValue);
     else if (parameterID == "chorusMix")
         chorus.setMix(newValue);
-    /*else if (parameterID == "synthAttack")
-        myVoice.env1.setAttack(newValue);
-    else if (parameterID == "synthDecay")
-        myVoice.env1.setDecay(newValue);
-    else if (parameterID == "synthSustain")
-        myVoice.env1.setSustain(newValue);
-    else if (parameterID == "synthRelease")
-        myVoice.env1.setRelease(newValue);
-    else if (parameterID == "chorusEnable")
-    {
-        chorus_centredelay_slider->setEnabled(newValue);         // Enable or disable the corresponding parameter sliders
-        chorus_depth_slider->setEnabled(newValue);
-        chorus_rate_slider->setEnabled(newValue);
-        chorus_mix_slider->setEnabled(newValue);
-        chorus_feedback_slider->setEnabled(newValue);
-    }*/
-
 }
 
 
@@ -121,12 +104,6 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
     for (int i = 0; i < 6; ++i) // polyphonic with 6 voices
     {
         mySynth.addVoice(new SynthVoice());
-        //mySynth.addVoice(&myVoice1);
-        //mySynth.addVoice(&myVoice2);
-        //mySynth.addVoice(&myVoice3);
-        //mySynth.addVoice(&myVoice4);
-        //mySynth.addVoice(&myVoice5);
-        //mySynth.addVoice(&myVoice6);
     }
     mySynth.clearSounds();
     mySynth.addSound(new SynthSound());
@@ -169,7 +146,6 @@ ManfredSynthAudioProcessor::~ManfredSynthAudioProcessor()
     parameters.removeParameterListener("synthSustain", this);
     parameters.removeParameterListener("synthRelease", this);
     //parameters.removeParameterListener("synthWave", this);
-    //myVoice = nullptr;
 }
 
 //==============================================================================
@@ -249,15 +225,6 @@ void ManfredSynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
     
     lastSampleRate = sampleRate; // make sure we use the same sample rate throughout this buffer. Just in case the sample rate should vary suddenly.
     mySynth.setCurrentPlaybackSampleRate(lastSampleRate);
-
-    /*
-    // MV prepare the synth
-    myVoice.env1.setAttack(SYNTHATTACK);
-    myVoice.env1.setDecay(SYNTHDECAY);
-    myVoice.env1.setSustain(SYNTHSUSTAIN);
-    myVoice.env1.setRelease(SYNTHRELEASE);
-    */
-
 }
 
 void ManfredSynthAudioProcessor::releaseResources()

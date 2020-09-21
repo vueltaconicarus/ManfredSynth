@@ -59,8 +59,7 @@ public:
 
     // MV ===========================================================================
     juce::dsp::Chorus<float> chorus;    // Chorus effect
-    //juce::Synthesiser synth;            // built-in synth, to be replaced by a third-party one
-    
+       
     void parameterChanged(const juce::String&, float) override;
 
     // default values for the chorus
@@ -78,12 +77,6 @@ public:
     // from Maximilian Synth Tutorial
     juce::Synthesiser mySynth;          // synthesizer using the third-party Maximilian library
     SynthVoice* myVoice;
-    SynthVoice myVoice1;                 // Synth voice using the third-party Maximilian library
-    //SynthVoice myVoice2;                 
-    //SynthVoice myVoice3;
-    //SynthVoice myVoice4;
-    //SynthVoice myVoice5;
-    //SynthVoice myVoice6;
     double lastSampleRate;
     
 private:
@@ -103,10 +96,6 @@ private:
     std::atomic<float>* synthReleaseParameter       = nullptr;
     //std::atomic<float>* synthWaveParameter          = nullptr;
 
-    // Maximilian
-    //maxiOsc Oscillator;
-
-        
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ManfredSynthAudioProcessor)
 };
 

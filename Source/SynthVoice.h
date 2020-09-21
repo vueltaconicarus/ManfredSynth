@@ -22,11 +22,14 @@ struct SynthVoice : public juce::SynthesiserVoice
         return dynamic_cast<SynthSound*> (sound) != nullptr;
     }
 
-    void getParam(float* attackPtr)
+    void getParam(float* attackPtr, float* decayPtr, float* sustainPtr, float* releasePtr)
     {
         //env1.setAttack(double(*attack));
-        attack = *attackPtr;
-        env1.setAttack(attack);
+        //attack = *attackPtr;
+        env1.setAttack(*attackPtr);
+        env1.setDecay(*decayPtr);
+        env1.setSustain(*sustainPtr);
+        env1.setRelease(*releasePtr);
     }
 
     void startNote(int midiNoteNumber, float velocity, juce::SynthesiserSound* sound, int currentPitchWheelPosition) override
@@ -62,10 +65,10 @@ struct SynthVoice : public juce::SynthesiserVoice
         double theWave;
         double theSound;
 
-        env1.setAttack(attack);
-        env1.setDecay(decay);
-        env1.setSustain(sustain);
-        env1.setRelease(release);
+        //env1.setAttack(attack);
+        //env1.setDecay(decay);
+        //env1.setSustain(sustain);
+        //env1.setRelease(release);
         
         for (int sample = 0; sample < numSamples; ++sample)
         {

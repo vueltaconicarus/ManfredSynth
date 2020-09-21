@@ -77,7 +77,13 @@ public:
 
     // from Maximilian Synth Tutorial
     juce::Synthesiser mySynth;          // synthesizer using the third-party Maximilian library
-    SynthVoice myVoice;                 // Synth voice using the third-party Maximilian library
+    SynthVoice* myVoice;
+    SynthVoice myVoice1;                 // Synth voice using the third-party Maximilian library
+    //SynthVoice myVoice2;                 
+    //SynthVoice myVoice3;
+    //SynthVoice myVoice4;
+    //SynthVoice myVoice5;
+    //SynthVoice myVoice6;
     double lastSampleRate;
     
 private:

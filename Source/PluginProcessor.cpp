@@ -121,6 +121,12 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
     for (int i = 0; i < 6; ++i) // polyphonic with 6 voices
     {
         mySynth.addVoice(new SynthVoice());
+        //mySynth.addVoice(&myVoice1);
+        //mySynth.addVoice(&myVoice2);
+        //mySynth.addVoice(&myVoice3);
+        //mySynth.addVoice(&myVoice4);
+        //mySynth.addVoice(&myVoice5);
+        //mySynth.addVoice(&myVoice6);
     }
     mySynth.clearSounds();
     mySynth.addSound(new SynthSound());
@@ -145,7 +151,7 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
     parameters.addParameterListener("chorusFeedback", this);
     parameters.addParameterListener("chorusMix", this);
     parameters.addParameterListener("synthAttack", this);
-    parameters.addParameterListener("synthRelease", this);
+    parameters.addParameterListener("synthDecay", this);
     parameters.addParameterListener("synthSustain", this);
     parameters.addParameterListener("synthRelease", this);
     //parameters.addParameterListener("synthWave", this);
@@ -159,7 +165,7 @@ ManfredSynthAudioProcessor::~ManfredSynthAudioProcessor()
     parameters.removeParameterListener("chorusFeedback", this);
     parameters.removeParameterListener("chorusMix", this);
     parameters.removeParameterListener("synthAttack", this);
-    parameters.removeParameterListener("synthRelease", this);
+    parameters.removeParameterListener("synthDecay", this);
     parameters.removeParameterListener("synthSustain", this);
     parameters.removeParameterListener("synthRelease", this);
     //parameters.removeParameterListener("synthWave", this);
@@ -289,7 +295,11 @@ void ManfredSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
     for (int i = 0; i < mySynth.getNumVoices(); ++i)
     {
-        myVoice.getParam((float*)synthAttackParameter);
+        if ((myVoice = dynamic_cast<SynthVoice*>(mySynth.getVoice(i))))
+                myVoice->getParam((float*)synthAttackParameter,
+                    (float*)synthDecayParameter, 
+                    (float*)synthSustainParameter, 
+                    (float*)synthReleaseParameter);
     }
 
     buffer.clear();

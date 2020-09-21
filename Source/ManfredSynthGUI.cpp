@@ -148,7 +148,7 @@ ManfredSynthGUI::ManfredSynthGUI (juce::AudioProcessorValueTreeState& vts)
     synthDecayAttachment        .reset(new SliderAttachment(valueTreeState, "synthDecay",           *synth_decay_slider.get()));
     synthSustainAttachment      .reset(new SliderAttachment(valueTreeState, "synthSustain",         *synth_sustain_slider.get()));
     synthReleaseAttachment      .reset(new SliderAttachment(valueTreeState, "synthRelease",         *synth_release_slider.get()));
-    //synthWaveAttachment         .reset(new ComboBoxAttachment(valueTreeState, "synthWave",          *synth_wave_comboBox.get()));
+    synthWaveAttachment         .reset(new ComboBoxAttachment(valueTreeState, "synthWave",          *synth_wave_comboBox.get()));
     //[/UserPreSize]
 
     setSize (600, 400);
@@ -179,7 +179,7 @@ ManfredSynthGUI::~ManfredSynthGUI()
     synthDecayAttachment        = nullptr;
     synthSustainAttachment      = nullptr;
     synthReleaseAttachment      = nullptr;
-    //synthWaveAttachment         = nullptr;
+    synthWaveAttachment         = nullptr;
     //[/Destructor_pre]
 
     synth_wave_comboBox = nullptr;

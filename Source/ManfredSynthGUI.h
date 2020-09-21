@@ -79,7 +79,7 @@ private:
     std::unique_ptr<SliderAttachment> synthDecayAttachment;
     std::unique_ptr<SliderAttachment> synthSustainAttachment;
     std::unique_ptr<SliderAttachment> synthReleaseAttachment;
-    //std::unique_ptr<ComboBoxAttachment> synthWaveAttachment;
+    std::unique_ptr<ComboBoxAttachment> synthWaveAttachment;
     //[/UserVariables]
 
     //==============================================================================

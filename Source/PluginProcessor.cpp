@@ -10,8 +10,6 @@
 #include "PluginEditor.h"
 #include "ManfredSynthGUI.h"
 
-//bool ManfredSynthAudioProcessor::doChorus = CHORUSENABLE;
-
 void ManfredSynthAudioProcessor::parameterChanged(const juce::String& parameterID, float newValue)
 {
     if (parameterID == "chorusRate")
@@ -89,15 +87,13 @@ ManfredSynthAudioProcessor::ManfredSynthAudioProcessor()
                                                         "Synth Release",     // parameter name
                                                         0.0f,               // minimum
                                                         5000.0f,             //maximum
-                                                        SYNTHRELEASE)              // default value
+                                                        SYNTHRELEASE),              // default value
+            std::make_unique<juce::AudioParameterChoice>("synthWave",
+                                                        "Synth Waveform",
+                                                        juce::StringArray({"Sine", "Square", "Saw", "Triangle"}),
+                                                        0)
         })
 {    
-
-    //std::make_unique<juce::AudioParameterChoice>("synthWave",
-    //    "Synth Waveform",
-    //    const juce::StringArray & ("Sine", "Square", "Saw", "Triangle"),
-    //    "Sine")
-
     // prepare the third-party Maximilian synth
     // make sure there are no remaining data in the buffer before playing a synth sound
     mySynth.clearVoices();

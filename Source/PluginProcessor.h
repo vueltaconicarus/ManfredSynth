@@ -94,7 +94,7 @@ private:
     std::atomic<float>* synthDecayParameter         = nullptr;
     std::atomic<float>* synthSustainParameter       = nullptr;
     std::atomic<float>* synthReleaseParameter       = nullptr;
-    //std::atomic<float>* synthWaveParameter          = nullptr;
+    std::atomic<float>* synthWaveParameter          = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ManfredSynthAudioProcessor)
 };

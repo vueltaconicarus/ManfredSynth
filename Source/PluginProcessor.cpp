@@ -24,7 +24,7 @@ void ManfredSynthAudioProcessor::parameterChanged(const juce::String& parameterI
         chorus.setFeedback(newValue);
     else if (parameterID == "chorusMix")
         chorus.setMix(newValue);
-    else if (parameterID == "synthAttack")
+    /*else if (parameterID == "synthAttack")
         myVoice.env1.setAttack(newValue);
     else if (parameterID == "synthDecay")
         myVoice.env1.setDecay(newValue);
@@ -32,6 +32,15 @@ void ManfredSynthAudioProcessor::parameterChanged(const juce::String& parameterI
         myVoice.env1.setSustain(newValue);
     else if (parameterID == "synthRelease")
         myVoice.env1.setRelease(newValue);
+    else if (parameterID == "chorusEnable")
+    {
+        chorus_centredelay_slider->setEnabled(newValue);         // Enable or disable the corresponding parameter sliders
+        chorus_depth_slider->setEnabled(newValue);
+        chorus_rate_slider->setEnabled(newValue);
+        chorus_mix_slider->setEnabled(newValue);
+        chorus_feedback_slider->setEnabled(newValue);
+    }*/
+
 }
 
 
@@ -154,6 +163,7 @@ ManfredSynthAudioProcessor::~ManfredSynthAudioProcessor()
     parameters.removeParameterListener("synthSustain", this);
     parameters.removeParameterListener("synthRelease", this);
     //parameters.removeParameterListener("synthWave", this);
+    //myVoice = nullptr;
 }
 
 //==============================================================================
@@ -234,11 +244,13 @@ void ManfredSynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
     lastSampleRate = sampleRate; // make sure we use the same sample rate throughout this buffer. Just in case the sample rate should vary suddenly.
     mySynth.setCurrentPlaybackSampleRate(lastSampleRate);
 
+    /*
     // MV prepare the synth
     myVoice.env1.setAttack(SYNTHATTACK);
     myVoice.env1.setDecay(SYNTHDECAY);
     myVoice.env1.setSustain(SYNTHSUSTAIN);
     myVoice.env1.setRelease(SYNTHRELEASE);
+    */
 
 }
 
@@ -274,6 +286,12 @@ bool ManfredSynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layo
 
 void ManfredSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+
+    for (int i = 0; i < mySynth.getNumVoices(); ++i)
+    {
+        myVoice.getParam((float*)synthAttackParameter);
+    }
+
     buffer.clear();
     // play Maximilian synth sound according to MIDI message
     mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());

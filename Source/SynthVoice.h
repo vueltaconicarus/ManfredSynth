@@ -22,6 +22,13 @@ struct SynthVoice : public juce::SynthesiserVoice
         return dynamic_cast<SynthSound*> (sound) != nullptr;
     }
 
+    void getParam(float* attackPtr)
+    {
+        //env1.setAttack(double(*attack));
+        attack = *attackPtr;
+        env1.setAttack(attack);
+    }
+
     void startNote(int midiNoteNumber, float velocity, juce::SynthesiserSound* sound, int currentPitchWheelPosition) override
     {
         env1.trigger = true; // the evnelope starts here
@@ -55,10 +62,10 @@ struct SynthVoice : public juce::SynthesiserVoice
         double theWave;
         double theSound;
 
-        env1.setAttack(1000);
-        env1.setDecay(2000);
-        env1.setSustain(0.8);
-        env1.setRelease(1000);
+        env1.setAttack(attack);
+        env1.setDecay(decay);
+        env1.setSustain(sustain);
+        env1.setRelease(release);
         
         for (int sample = 0; sample < numSamples; ++sample)
         {
@@ -76,6 +83,10 @@ struct SynthVoice : public juce::SynthesiserVoice
 private:
     double level;
     double frequency;
+    float attack = 0.1;
+    float decay = 0.1;
+    float sustain = 1;
+    float release = 0.1;
 public:
     maxiOsc osc1;   // Maximilian oscillator
     maxiEnv env1;   // Maximilian envelope, to prevent clicks at the start and end of the note

@@ -278,6 +278,8 @@ void ManfredSynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
 
+
+    bool a = *parameters.getRawParameterValue("chorusEnable");
     // add Chorus effect
     // alternative: if (*chorusEnableParameter)
     if (*parameters.getRawParameterValue("chorusEnable"))
@@ -304,24 +306,28 @@ void ManfredSynthAudioProcessor::getStateInformation (juce::MemoryBlock& destDat
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
-    juce::MemoryOutputStream(destData, true).writeBool(*chorusEnableParameter);
+    /*
+    juce::MemoryOutputStream(destData, true).writeFloat(*chorusEnableParameter);
     juce::MemoryOutputStream(destData, true).writeFloat(*chorusRateParameter);
     juce::MemoryOutputStream(destData, true).writeFloat(*chorusDepthParameter);
     juce::MemoryOutputStream(destData, true).writeFloat(*chorusCentreDelayParameter);
     juce::MemoryOutputStream(destData, true).writeFloat(*chorusFeedbackParameter);
     juce::MemoryOutputStream(destData, true).writeFloat(*chorusMixParameter);
+    */
 }
 
 void ManfredSynthAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
-    *chorusEnableParameter = juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readBool();
+    /*
+    *chorusEnableParameter = juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readFloat();
     *chorusRateParameter = juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readFloat();
     *chorusDepthParameter = juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readFloat();
     *chorusCentreDelayParameter = juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readFloat();
     *chorusFeedbackParameter = juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readFloat();
     *chorusMixParameter = juce::MemoryInputStream(data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    */
 }
 
 //==============================================================================
